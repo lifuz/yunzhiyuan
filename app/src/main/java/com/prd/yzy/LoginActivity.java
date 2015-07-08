@@ -122,6 +122,10 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                                 Toast.makeText(LoginActivity.this,"用户名或密码错误",Toast.LENGTH_SHORT).show();
                                 //其他则登录成功，然后跳转到主页面
                             } else {
+                                //把登录信息放入sharepreferences文件中
+                                editor.putString("suid",suid);
+                                editor.commit();
+                                //跳转到mainActivity
                                 startActivity(new Intent(LoginActivity.this,MainActivity.class));
                             }
                         } catch (JSONException e) {
