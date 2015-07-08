@@ -1,6 +1,5 @@
 package com.prd.yzy;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -15,8 +14,10 @@ import com.prd.yzy.fragment.MiShuFragment;
 import com.prd.yzy.fragment.WoFragment;
 import com.prd.yzy.fragment.XHBFragment;
 
+import org.simple.eventbus.EventBus;
 
-public class MainActivity extends Activity implements View.OnClickListener {
+
+public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     //定义用于显示的fragment页面
     private GuanJiaFragment gj;
@@ -238,6 +239,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         if (arg1 == DialogInterface.BUTTON_POSITIVE) {
                             arg0.cancel();
                         } else if (arg1 == DialogInterface.BUTTON_NEGATIVE) {
+                            EventBus.getDefault().post(new String(),"csuicide");
                             MainActivity.this.finish();
                         }
                     }

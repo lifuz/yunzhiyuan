@@ -26,7 +26,7 @@ import org.json.JSONObject;
  * <p/>
  * Created by 李富 on 2015/7/7.
  */
-public class LoginActivity extends Activity implements View.OnClickListener {
+public class LoginActivity extends BaseActivity implements View.OnClickListener {
 
     private EditText username, password;
     private TextView login;
@@ -37,7 +37,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
     //使用sharepreferences存储登录信息
     SharedPreferences share;
-    SharedPreferences.Editor  editor;
+    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +48,9 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         //初始化组件
         init();
 
-        String id = share.getString("suid","");
-        if(!id.equals("")){
-            startActivity(new Intent(LoginActivity.this,MainActivity.class));
+        String id = share.getString("suid", "");
+        if (!id.equals("")) {
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
         }
 
     }
@@ -74,7 +74,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
         //获取sharepreferences
 
-        share = getSharedPreferences("login",Activity.MODE_PRIVATE);
+        share = getSharedPreferences("login", Activity.MODE_PRIVATE);
         editor = share.edit();
 
     }
@@ -95,10 +95,10 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 params.put("username", username.getText().toString());
 
 
-                Log.i("tag",username.getText().toString());
+                Log.i("tag", username.getText().toString());
                 try {
                     params.put("password", MyUtil.encrypt(password.getText().toString()));
-                    Log.i("tag",MyUtil.encrypt(password.getText().toString()));
+                    Log.i("tag", MyUtil.encrypt(password.getText().toString()));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -113,20 +113,20 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                             //获取suid的值
                             String suid = response.getString("suid");
                             //如果suid的值为负数的话，则是服务器出现问题。
-                            if(suid.equals("-1")){
+                            if (suid.equals("-1")) {
                                 //Toast告诉用户服务器出现问题
-                                Toast.makeText(LoginActivity.this,"服务器出现错误",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, "服务器出现错误", Toast.LENGTH_SHORT).show();
                                 //如果suid的值为0则用户不存在或者用户名或密码错误
-                            } else if(suid.equals("0")) {
+                            } else if (suid.equals("0")) {
 
-                                Toast.makeText(LoginActivity.this,"用户名或密码错误",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, "用户名或密码错误", Toast.LENGTH_SHORT).show();
                                 //其他则登录成功，然后跳转到主页面
                             } else {
                                 //把登录信息放入sharepreferences文件中
-                                editor.putString("suid",suid);
+                                editor.putString("suid", suid);
                                 editor.commit();
                                 //跳转到mainActivity
-                                startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

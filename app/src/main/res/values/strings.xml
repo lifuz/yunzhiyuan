@@ -11,4 +11,18 @@
     <string name="tab_xiaohuoban">小伙伴</string>
     <string name="tab_mishu">秘书</string>
     <string name="tab_wo">我</string>
+    <string name="wo_dqzf">当前积分：</string>
+    <string name="wo_xxtz">"    消息通知"</string>
+    <string name="wo_jfgl">"    积分管理"</string>
+    <string name="wo_zsk">"    知识库"</string>
+    <string name="wo_shezhi">"    设置"</string>
+    <string name="gj_yg">员工</string>
+    <string name="gj_bom">BOM</string>
+    <string name="gj_sb">设备</string>
+    <string name="gj_xs">销售</string>
+    <string name="gj_sc">生产</string>
+    <string name="gj_oa">OA</string>
+    <string name="gj_cw">财务</string>
+    <string name="gj_kc">库存</string>
+    <string name="gj_cg">采购</string>
 </resources>
