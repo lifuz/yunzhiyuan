@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -136,9 +137,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
         FragmentTransaction transaction = fm.beginTransaction();
         // 先隐藏掉所有的Fragment，以防止有多个Fragment显示在界面上的情况
         hideFragments(transaction);
+        //清除选中状态
+        clearSelection();
 
         switch (index) {
             case 0:
+
+                guanjiaLayout.setBackgroundColor(Color.parseColor("#45be45"));
+
                 if (gj == null) {
 
                     //如果gj为空，则创建一个并添加到界面
@@ -154,6 +160,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 break;
 
             case 1:
+                xhbLayout.setBackgroundColor(Color.parseColor("#45be45"));
                 if (xhb == null) {
 
                     //如果xhb为空，则创建一个并添加到界面
@@ -166,6 +173,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 break;
 
             case 2:
+                mishuLayout.setBackgroundColor(Color.parseColor("#45be45"));
                 if (ms == null) {
 
                     //如果ms为空，则创建一个并添加到界面
@@ -178,6 +186,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 break;
 
             case 3:
+                woLayout.setBackgroundColor(Color.parseColor("#45be45"));
                 if (wo == null) {
 
                     //如果wo为空，则创建一个并添加到界面
@@ -193,6 +202,16 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         transaction.commit();
 
+    }
+
+    /**
+     * 清除锁定状态
+     */
+    private void clearSelection(){
+        guanjiaLayout.setBackgroundColor(Color.parseColor("#efefef"));
+        xhbLayout.setBackgroundColor(Color.parseColor("#efefef"));
+        mishuLayout.setBackgroundColor(Color.parseColor("#efefef"));
+        woLayout.setBackgroundColor(Color.parseColor("#efefef"));
     }
 
     /**
