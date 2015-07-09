@@ -1,10 +1,13 @@
 package com.prd.yzy;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
@@ -20,6 +23,7 @@ import com.prd.yzy.utils.MyUtil;
 import org.apache.http.Header;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.simple.eventbus.EventBus;
 
 /**
  * 用户登录界面
@@ -137,5 +141,37 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                 break;
         }
+    }
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                builder.setTitle("提示");
+                builder.setMessage("你确定要退出吗？");
+
+                DialogInterface.OnClickListener dialog = new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        // TODO Auto-generated method stub
+                        if (arg1 == DialogInterface.BUTTON_POSITIVE) {
+                            arg0.cancel();
+                        } else if (arg1 == DialogInterface.BUTTON_NEGATIVE) {
+                            EventBus.getDefault().post(new String(),"csuicide");
+
+                        }
+                    }
+                };
+                builder.setPositiveButton("取消", dialog);
+                builder.setNegativeButton("确定", dialog);
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+
+            }
+        }
+        return false;
     }
 }

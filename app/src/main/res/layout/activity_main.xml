@@ -3,18 +3,19 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <FrameLayout
-        android:id="@+id/bottomMenu_content"
+    <android.support.v4.view.ViewPager
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" >
-    </FrameLayout>
+        android:layout_weight="1"
+        >
+
+    </android.support.v4.view.ViewPager>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@drawable/tab_bg"
-        android:orientation="horizontal" >
+        android:orientation="horizontal">
 
         <!-- Tab:管家 -->
 
@@ -22,26 +23,29 @@
             android:id="@+id/bottomMenu_guanjiaLayout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1" >
+            android:layout_weight="1">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:orientation="vertical" >
+                android:orientation="vertical">
+
                 <ImageView
                     android:id="@+id/bottomMenu_shouyeImage"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/tab_guanjia" />
+
                 <TextView
                     android:id="@+id/bottomMenu_guanjiaTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:text="@string/tab_guanjia"
-                    android:textSize="14sp"
-                    android:textColor="#82858b" />
+                    android:textColor="#82858b"
+                    android:textSize="14sp" />
             </LinearLayout>
         </RelativeLayout>
 
@@ -50,12 +54,13 @@
             android:id="@+id/bottomMenu_xhbLayout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1" >
+            android:layout_weight="1">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:orientation="vertical" >
+                android:orientation="vertical">
 
                 <ImageView
                     android:id="@+id/bottomMenu_xhbImage"
@@ -70,8 +75,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:text="@string/tab_xiaohuoban"
-                    android:textSize="14sp"
-                    android:textColor="#82858b" />
+                    android:textColor="#82858b"
+                    android:textSize="14sp" />
             </LinearLayout>
         </RelativeLayout>
 
@@ -81,13 +86,13 @@
             android:id="@+id/bottomMenu_mishuLayout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1" >
+            android:layout_weight="1">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:orientation="vertical" >
+                android:orientation="vertical">
 
                 <ImageView
                     android:id="@+id/bottomMenu_mishuImage"
@@ -102,8 +107,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:text="@string/tab_mishu"
-                    android:textSize="14sp"
-                    android:textColor="#82858b" />
+                    android:textColor="#82858b"
+                    android:textSize="14sp" />
             </LinearLayout>
         </RelativeLayout>
 
@@ -112,13 +117,13 @@
             android:id="@+id/bottomMenu_woLayout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1" >
+            android:layout_weight="1">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:orientation="vertical" >
+                android:orientation="vertical">
 
                 <ImageView
                     android:id="@+id/bottomMenu_woImage"
@@ -133,8 +138,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:text="@string/tab_wo"
-                    android:textSize="14sp"
-                    android:textColor="#82858b" />
+                    android:textColor="#82858b"
+                    android:textSize="14sp" />
             </LinearLayout>
         </RelativeLayout>
     </LinearLayout>

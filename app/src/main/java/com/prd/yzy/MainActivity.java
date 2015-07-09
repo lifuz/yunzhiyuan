@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.prd.yzy.fragment.GuanJiaFragment;
@@ -25,11 +26,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private XHBFragment xhb;
     private WoFragment wo;
 
+    private View content;
+
+    int realIndex = 0;
+
+    float mPositionX;
+
     //
     private View guanjiaLayout, xhbLayout, mishuLayout, woLayout;
 
     // 用于对Fragment管理
     private FragmentManager fm;
+
+    private static final int MOVE_DISTANCE = 40;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +70,40 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         xhbLayout.setOnClickListener(this);
         mishuLayout.setOnClickListener(this);
         woLayout.setOnClickListener(this);
+
+        content = findViewById(R.id.bottomMenu_content);
+        content.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (v.getId() == R.id.bottomMenu_content) {
+                    int action = event.getAction();
+                    switch (action) {
+                        case MotionEvent.ACTION_DOWN :
+                            mPositionX = event.getX();
+                            break;
+                        case MotionEvent.ACTION_MOVE :
+                            final float currentX = event.getX();
+//                            // 向左边滑动
+//                            if (currentX - mPositionX <= -MOVE_DISTANCE ) {
+//                                if(realIndex != 0){
+//                                    realIndex = realIndex - 1;
+//                                    setTabSelection(realIndex);
+//                                }
+//                                Toast.makeText(MainActivity.this,"向左滑动",Toast.LENGTH_SHORT).show();
+//                            } else if (currentX - mPositionX >= MOVE_DISTANCE ) {
+//                                if(realIndex != 3){
+//                                    realIndex = realIndex - 1;
+//                                    setTabSelection(realIndex);
+//                                }
+//                                Toast.makeText(MainActivity.this,"向右滑动",Toast.LENGTH_SHORT).show();
+//                            }
+                            break;
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
 
         //初始化fragment管理器
         fm = getFragmentManager();
@@ -158,6 +201,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
                 }
 
+                realIndex = 0;
                 break;
 
             case 1:
@@ -171,6 +215,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     //如果xhb不为空，则直接显示出来
                     transaction.show(xhb);
                 }
+
+                realIndex = 1;
                 break;
 
             case 2:
@@ -184,6 +230,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     //如果ms不为空，则直接显示出来
                     transaction.show(ms);
                 }
+
+                realIndex = 2;
                 break;
 
             case 3:
@@ -197,6 +245,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     //如果wo不为空，则直接显示出来
                     transaction.show(wo);
                 }
+
+                realIndex = 3;
                 break;
 
         }
