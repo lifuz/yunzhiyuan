@@ -5,10 +5,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.inqbarna.tablefixheaders.TableFixHeaders;
 import com.inqbarna.tablefixheaders.adapters.BaseTableAdapter;
@@ -97,7 +99,7 @@ public class EmployeeActivity extends BaseActivity  {
                     }
                 }
 
-//                Log.i("tag",customers.toString());
+                Log.i("tag", "已经获取到了数据");
                 tfh.setAdapter(new MyAdapter(getApplicationContext()));
 
             }
@@ -183,7 +185,7 @@ public class EmployeeActivity extends BaseActivity  {
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                        Toast.makeText(MainActivity.this, getCellString(row, column), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EmployeeActivity.this, customers.get(row).getCname(), Toast.LENGTH_SHORT).show();
                     }
                 });
             }

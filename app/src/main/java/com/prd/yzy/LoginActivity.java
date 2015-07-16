@@ -96,12 +96,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 }
 
                 //设置登录的两个参数，username，password
-                params.put("username", username.getText().toString());
+                params.put("userName", username.getText().toString());
 
 
                 Log.i("tag", username.getText().toString());
                 try {
-                    params.put("password", MyUtil.encrypt(password.getText().toString()));
+                    params.put("passWord", password.getText().toString());
                     Log.i("tag", MyUtil.encrypt(password.getText().toString()));
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -111,27 +111,27 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 client.post(HttpUrls.http_login, params, new JsonHttpResponseHandler() {
 
                     @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                        Toast.makeText(LoginActivity.this,"用户名或密码错误",Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         try {
 
-                            //获取suid的值
-                            String suid = response.getString("suid");
-                            //如果suid的值为负数的话，则是服务器出现问题。
-                            if (suid.equals("-1")) {
-                                //Toast告诉用户服务器出现问题
-                                Toast.makeText(LoginActivity.this, "服务器出现错误", Toast.LENGTH_SHORT).show();
-                                //如果suid的值为0则用户不存在或者用户名或密码错误
-                            } else if (suid.equals("0")) {
 
-                                Toast.makeText(LoginActivity.this, "用户名或密码错误", Toast.LENGTH_SHORT).show();
-                                //其他则登录成功，然后跳转到主页面
-                            } else {
+
+                                //获取suid的值
+                                String suid = response.getString("desc");
+
                                 //把登录信息放入sharepreferences文件中
                                 editor.putString("suid", suid);
                                 editor.commit();
                                 //跳转到mainActivity
                                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                            }
+
+
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
