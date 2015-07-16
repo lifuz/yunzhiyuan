@@ -25,4 +25,5 @@
     <string name="gj_cw">财务</string>
     <string name="gj_kc">库存</string>
     <string name="gj_cg">采购</string>
+    <string name="car_info">车辆信息</string>
 </resources>

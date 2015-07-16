@@ -1,13 +1,16 @@
 package com.prd.yzy;
 
 import android.app.AlertDialog;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 
 import com.prd.yzy.fragment.GuanJiaFragment;
@@ -17,252 +20,192 @@ import com.prd.yzy.fragment.XHBFragment;
 
 import org.simple.eventbus.EventBus;
 
+import java.util.ArrayList;
+import java.util.List;
 
-public class MainActivity extends BaseActivity implements View.OnClickListener {
 
-    //定义用于显示的fragment页面
-    private GuanJiaFragment gj;
-    private MiShuFragment ms;
-    private XHBFragment xhb;
-    private WoFragment wo;
+public class MainActivity extends ActionBarActivity implements View.OnClickListener {
 
-    private View content;
+    private ViewPager pager;
 
-    int realIndex = 0;
+    private View gj, xhb, ms, wo;
 
-    float mPositionX;
+    private List<Fragment> fragments;
 
-    //
-    private View guanjiaLayout, xhbLayout, mishuLayout, woLayout;
+    private int offset = 0;// 动画图片偏移量
+    private int currIndex = 0;// 当前页卡编号
 
-    // 用于对Fragment管理
-    private FragmentManager fm;
+    /**
+     * 页卡总数 *
+     */
+    private static final int pageSize = 4;
 
-    private static final int MOVE_DISTANCE = 40;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
 
-        //去除页面标题
-//        requestWindowFeature(Window.FEATURE_NO_TITLE);
-
+        //隐藏标题，这种为Android5.0的新特性：如果直接继承Activity则自动隐藏标题
+        //如果继承ActionBarActivity则需使用如下方式，二不能使用以前的方法
+        //以前的方法：requestWindowFeature(Window.FEATURE_NO_TITLE);
+        ActionBar bar = getSupportActionBar();
+        bar.hide();
         setContentView(R.layout.activity_main);
 
-        //初始化组件
+
         initViews();
-        // 第一次启动时选中第0个tab
-        setTabSelection(0);
     }
 
-    //对页面组件进行初始化
-    public void initViews() {
-
-        //初始化组件
-        guanjiaLayout = findViewById(R.id.bottomMenu_guanjiaLayout);
-        xhbLayout = findViewById(R.id.bottomMenu_xhbLayout);
-        mishuLayout = findViewById(R.id.bottomMenu_mishuLayout);
-        woLayout = findViewById(R.id.bottomMenu_woLayout);
-
-        //给有点击事件的组件，添加点击事件
-        guanjiaLayout.setOnClickListener(this);
-        xhbLayout.setOnClickListener(this);
-        mishuLayout.setOnClickListener(this);
-        woLayout.setOnClickListener(this);
-
-        content = findViewById(R.id.bottomMenu_content);
-        content.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (v.getId() == R.id.bottomMenu_content) {
-                    int action = event.getAction();
-                    switch (action) {
-                        case MotionEvent.ACTION_DOWN :
-                            mPositionX = event.getX();
-                            break;
-                        case MotionEvent.ACTION_MOVE :
-                            final float currentX = event.getX();
-//                            // 向左边滑动
-//                            if (currentX - mPositionX <= -MOVE_DISTANCE ) {
-//                                if(realIndex != 0){
-//                                    realIndex = realIndex - 1;
-//                                    setTabSelection(realIndex);
-//                                }
-//                                Toast.makeText(MainActivity.this,"向左滑动",Toast.LENGTH_SHORT).show();
-//                            } else if (currentX - mPositionX >= MOVE_DISTANCE ) {
-//                                if(realIndex != 3){
-//                                    realIndex = realIndex - 1;
-//                                    setTabSelection(realIndex);
-//                                }
-//                                Toast.makeText(MainActivity.this,"向右滑动",Toast.LENGTH_SHORT).show();
-//                            }
-                            break;
-                    }
-                    return true;
-                }
-                return false;
-            }
-        });
-
-        //初始化fragment管理器
-        fm = getFragmentManager();
-
-    }
-
-    /**
-     * 将所有的fragment都置为隐藏状态
-     *
-     * @param transaction 对fragment执行操作的事务
-     */
-    private void hideFragments(FragmentTransaction transaction) {
-        if (gj != null) {
-            transaction.hide(gj);
-        }
-
-        if (xhb != null) {
-            transaction.hide(xhb);
-        }
-
-        if (ms != null) {
-            transaction.hide(ms);
-        }
-
-        if (wo != null) {
-            transaction.hide(wo);
-        }
-    }
-
-    /**
-     * 处理点击事件
-     *
-     * @param v
-     */
     @Override
     public void onClick(View v) {
 
         switch (v.getId()) {
-
-            //点击管家tab，选中第零个tab
             case R.id.bottomMenu_guanjiaLayout:
 
-                setTabSelection(0);
+                pager.setCurrentItem(0);
                 break;
 
-            //点击小伙伴tab，选中第1个tab
             case R.id.bottomMenu_xhbLayout:
 
-                setTabSelection(1);
+                pager.setCurrentItem(1);
                 break;
 
-            //点击秘书tab，选中第2个tab
             case R.id.bottomMenu_mishuLayout:
 
-                setTabSelection(2);
+                pager.setCurrentItem(2);
                 break;
 
-            //点击我tab，选中第3个tab
             case R.id.bottomMenu_woLayout:
 
-                setTabSelection(3);
+                pager.setCurrentItem(3);
                 break;
         }
 
     }
 
-    /**
-     * 根据传入的index参数来设置选中的tab页。
-     *
-     * @param index 每个tab页对应的下标。0表示管家，1表示小伙伴，2表示秘书，3表示我。
-     */
-    private void setTabSelection(int index) {
+    public void initViews() {
 
-        // 开启一个Fragment事务
-        FragmentTransaction transaction = fm.beginTransaction();
-        // 先隐藏掉所有的Fragment，以防止有多个Fragment显示在界面上的情况
-        hideFragments(transaction);
-        //清除选中状态
-        clearSelection();
+        //初始化点击组件并给其添加点击事件
+        gj = findViewById(R.id.bottomMenu_guanjiaLayout);
+        gj.setOnClickListener(this);
 
-        switch (index) {
-            case 0:
+        xhb = findViewById(R.id.bottomMenu_xhbLayout);
+        xhb.setOnClickListener(this);
 
-                guanjiaLayout.setBackgroundColor(Color.parseColor("#45be45"));
+        ms = findViewById(R.id.bottomMenu_mishuLayout);
+        ms.setOnClickListener(this);
 
-                if (gj == null) {
+        wo = findViewById(R.id.bottomMenu_woLayout);
+        wo.setOnClickListener(this);
 
-                    //如果gj为空，则创建一个并添加到界面
-                    gj = new GuanJiaFragment();
-                    transaction.add(R.id.bottomMenu_content, gj);
-                } else {
-                    //如果gj不为空，则直接显示出来
+        //初始化ViewPager
+        pager = (ViewPager) findViewById(R.id.main_pager);
 
-                    transaction.show(gj);
-
-                }
-
-                realIndex = 0;
-                break;
-
-            case 1:
-                xhbLayout.setBackgroundColor(Color.parseColor("#45be45"));
-                if (xhb == null) {
-
-                    //如果xhb为空，则创建一个并添加到界面
-                    xhb = new XHBFragment();
-                    transaction.add(R.id.bottomMenu_content, xhb);
-                } else {
-                    //如果xhb不为空，则直接显示出来
-                    transaction.show(xhb);
-                }
-
-                realIndex = 1;
-                break;
-
-            case 2:
-                mishuLayout.setBackgroundColor(Color.parseColor("#45be45"));
-                if (ms == null) {
-
-                    //如果ms为空，则创建一个并添加到界面
-                    ms = new MiShuFragment();
-                    transaction.add(R.id.bottomMenu_content, ms);
-                } else {
-                    //如果ms不为空，则直接显示出来
-                    transaction.show(ms);
-                }
-
-                realIndex = 2;
-                break;
-
-            case 3:
-                woLayout.setBackgroundColor(Color.parseColor("#45be45"));
-                if (wo == null) {
-
-                    //如果wo为空，则创建一个并添加到界面
-                    wo = new WoFragment();
-                    transaction.add(R.id.bottomMenu_content, wo);
-                } else {
-                    //如果wo不为空，则直接显示出来
-                    transaction.show(wo);
-                }
-
-                realIndex = 3;
-                break;
-
-        }
-
-        transaction.commit();
+        //初始化List，并把要使用的fragment放入list中
+        fragments = new ArrayList<Fragment>();
+        fragments.add(new GuanJiaFragment());
+        fragments.add(new XHBFragment());
+        fragments.add(new MiShuFragment());
+        fragments.add(new WoFragment());
+        //给ViewPager添加适配器
+        pager.setAdapter(new MyPagerAdapter(getSupportFragmentManager(), fragments));
+        //指定进入页面首先显示的页面
+        gj.setBackgroundColor(Color.parseColor("#45be45"));
+        pager.setCurrentItem(0);
+        //给ViewPager添加页面改变的监听事件
+        pager.setOnPageChangeListener(new MyOnPageChangeListener());
 
     }
 
     /**
-     * 清除锁定状态
+     * 为选项卡绑定监听器
      */
-    private void clearSelection(){
-        guanjiaLayout.setBackgroundColor(Color.parseColor("#efefef"));
-        xhbLayout.setBackgroundColor(Color.parseColor("#efefef"));
-        mishuLayout.setBackgroundColor(Color.parseColor("#efefef"));
-        woLayout.setBackgroundColor(Color.parseColor("#efefef"));
+    public class MyOnPageChangeListener implements ViewPager.OnPageChangeListener {
+
+        public void onPageScrollStateChanged(int index) {
+        }
+
+        public void onPageScrolled(int arg0, float arg1, int arg2) {
+        }
+
+        public void onPageSelected(int index) {
+
+            //切换页面时给tab进行相应的改变
+            switch (index) {
+                case 0:
+
+                    gj.setBackgroundColor(Color.parseColor("#45be45"));
+                    xhb.setBackgroundColor(Color.parseColor("#efefef"));
+                    ms.setBackgroundColor(Color.parseColor("#efefef"));
+                    wo.setBackgroundColor(Color.parseColor("#efefef"));
+                    break;
+
+                case 1:
+
+                    gj.setBackgroundColor(Color.parseColor("#efefef"));
+                    xhb.setBackgroundColor(Color.parseColor("#45be45"));
+                    ms.setBackgroundColor(Color.parseColor("#efefef"));
+                    wo.setBackgroundColor(Color.parseColor("#efefef"));
+                    break;
+
+                case 2:
+
+                    gj.setBackgroundColor(Color.parseColor("#efefef"));
+                    xhb.setBackgroundColor(Color.parseColor("#efefef"));
+                    ms.setBackgroundColor(Color.parseColor("#45be45"));
+                    wo.setBackgroundColor(Color.parseColor("#efefef"));
+                    break;
+
+                case 3:
+
+                    gj.setBackgroundColor(Color.parseColor("#efefef"));
+                    xhb.setBackgroundColor(Color.parseColor("#efefef"));
+                    ms.setBackgroundColor(Color.parseColor("#efefef"));
+                    wo.setBackgroundColor(Color.parseColor("#45be45"));
+                    break;
+
+
+            }
+
+        }
+    }
+
+
+    /**
+     * 定义适配器
+     */
+    class MyPagerAdapter extends FragmentPagerAdapter {
+        private List<Fragment> fragmentList;
+
+        public MyPagerAdapter(FragmentManager fm, List<Fragment> fragmentList) {
+            super(fm);
+            this.fragmentList = fragmentList;
+        }
+
+        /**
+         * 得到每个页面
+         */
+        @Override
+        public Fragment getItem(int arg0) {
+            return (fragmentList == null || fragmentList.size() == 0) ? null
+                    : fragmentList.get(arg0);
+        }
+
+        /**
+         * 每个页面的title
+         */
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return null;
+        }
+
+        /**
+         * 页面的总个数
+         */
+        @Override
+        public int getCount() {
+            return fragmentList == null ? 0 : fragmentList.size();
+        }
     }
 
     /**
@@ -289,7 +232,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         if (arg1 == DialogInterface.BUTTON_POSITIVE) {
                             arg0.cancel();
                         } else if (arg1 == DialogInterface.BUTTON_NEGATIVE) {
-                            EventBus.getDefault().post(new String(),"csuicide");
+                            EventBus.getDefault().post(new String(), "csuicide");
                             MainActivity.this.finish();
                         }
                     }

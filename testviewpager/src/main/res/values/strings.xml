@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">TestViewPager</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="tab_guanjia">管家</string>
+    <string name="tab_xiaohuoban">小伙伴</string>
+    <string name="tab_mishu">秘书</string>
+    <string name="tab_wo">我</string>
+</resources>
