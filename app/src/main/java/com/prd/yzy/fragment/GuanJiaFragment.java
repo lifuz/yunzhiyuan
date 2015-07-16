@@ -1,6 +1,7 @@
 package com.prd.yzy.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.prd.yzy.R;
+import com.prd.yzy.gj.EmployeeActivity;
 
 /**
  * Created by 李富 on 2015/7/7.
@@ -73,7 +75,8 @@ public class GuanJiaFragment extends Fragment implements View.OnClickListener {
 
             case R.id.gj_yg:
 
-                Toast.makeText(getActivity(),"你点击了员工",Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getActivity(), EmployeeActivity.class));
+
                 break;
 
             case R.id.gj_bom:

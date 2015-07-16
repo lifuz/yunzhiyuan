@@ -25,4 +25,5 @@ dependencies {
     compile files('libs/android-async-http-1.4.7.jar')
     compile files('libs/androideventbus-1.0.4.jar')
     compile files('libs/BaiduLBS_Android.jar')
+    compile project(':TableFixHeaders')
 }
