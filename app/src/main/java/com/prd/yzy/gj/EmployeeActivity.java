@@ -36,7 +36,7 @@ import java.util.List;
 /**
  * Created by 李富 on 2015/7/16.
  */
-public class EmployeeActivity extends BaseActivity  {
+public class EmployeeActivity extends BaseActivity  implements View.OnClickListener {
 
     private List<Customer> customers;
 
@@ -51,6 +51,8 @@ public class EmployeeActivity extends BaseActivity  {
     private static List<Customer> customerList;
 
     private MyAdapter adapter;
+
+    private View emp_back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +74,8 @@ public class EmployeeActivity extends BaseActivity  {
         params = new RequestParams();
 
         tfh = (TableFixHeaders) findViewById(R.id.yg_table);
+        emp_back = findViewById(R.id.emp_search);
+        emp_back.setOnClickListener(this);
 
         emp_search = (EditText) findViewById(R.id.emp_search);
         emp_search.addTextChangedListener(watcher);
@@ -121,7 +125,15 @@ public class EmployeeActivity extends BaseActivity  {
         });
     }
 
-    boolean is = false;
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.emp_back:
+                finish();
+                break;
+        }
+    }
+
     private TextWatcher watcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count,
