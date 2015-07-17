@@ -58,6 +58,16 @@
         </LinearLayout>
     </LinearLayout>
 
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="请输入姓名"
+        android:ems="10"
+        android:id="@+id/emp_search"
+        android:drawableLeft="@drawable/icon_square_sel"/>
+
     <com.inqbarna.tablefixheaders.TableFixHeaders
         android:id="@+id/yg_table"
         android:layout_width="match_parent"

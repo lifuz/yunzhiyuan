@@ -19,6 +19,7 @@ import com.prd.yzy.fragment.WoFragment;
 import com.prd.yzy.fragment.XHBFragment;
 
 import org.simple.eventbus.EventBus;
+import org.simple.eventbus.Subscriber;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,8 +53,16 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         bar.hide();
         setContentView(R.layout.activity_main);
 
+        // 将对象注册到事件总线中， ****** 注意要在onDestory中进行注销 ****
+        EventBus.getDefault().register(this);
 
         initViews();
+    }
+
+    //订阅事件
+    @Subscriber(tag = "csuicide")
+    private void csuicideMyself(String msg) {
+        finish();
     }
 
     @Override
@@ -206,6 +215,13 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         public int getCount() {
             return fragmentList == null ? 0 : fragmentList.size();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // ****** 不要忘了进行注销 ****
+        EventBus.getDefault().unregister(this);
     }
 
     /**
