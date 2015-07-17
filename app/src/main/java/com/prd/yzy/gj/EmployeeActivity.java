@@ -5,10 +5,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +47,11 @@ public class EmployeeActivity extends BaseActivity  {
 
     private TableFixHeaders tfh;
 
+    private EditText emp_search;
+    private static List<Customer> customerList;
+
+    private MyAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,11 +66,15 @@ public class EmployeeActivity extends BaseActivity  {
         share = getSharedPreferences("login", Activity.MODE_PRIVATE);
 
         customers = new ArrayList<>();
+        customerList = new ArrayList<>();
 
         client = new AsyncHttpClient();
         params = new RequestParams();
 
         tfh = (TableFixHeaders) findViewById(R.id.yg_table);
+
+        emp_search = (EditText) findViewById(R.id.emp_search);
+        emp_search.addTextChangedListener(watcher);
 
         String sgid = share.getString("suid","");
 
@@ -93,6 +105,7 @@ public class EmployeeActivity extends BaseActivity  {
                         customer.setDriverOperId(object.getString("driverOperId"));
                         customer.setSex(object.getString("sex"));
                         customers.add(customer);
+                        customerList.add(customer);
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -100,11 +113,49 @@ public class EmployeeActivity extends BaseActivity  {
                 }
 
                 Log.i("tag", "已经获取到了数据");
-                tfh.setAdapter(new MyAdapter(getApplicationContext()));
+
+                adapter = new MyAdapter(getApplicationContext());
+                tfh.setAdapter(adapter);
 
             }
         });
     }
+
+    boolean is = false;
+    private TextWatcher watcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count,
+                                      int after) {
+        }
+
+
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before,
+                                  int count) {
+
+            String str = emp_search.getText().toString();
+//            if(str.equals("")){
+//                return;
+//            }
+            customers.clear();
+            for(Customer customer:customerList){
+                if(customer.getCname().contains(str)){
+                   customers.add(customer);
+                }
+            }
+
+
+
+            adapter.notifyDataSetChanged();
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable arg0) {
+
+        }
+    };
 
 
     public class MyAdapter extends BaseTableAdapter {
