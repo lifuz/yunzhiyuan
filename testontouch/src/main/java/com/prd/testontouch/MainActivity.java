@@ -39,16 +39,19 @@ public class MainActivity extends Activity {
             public boolean onTouch(View v, MotionEvent event) {
 
                 switch (event.getAction()){
+                    //当手离开屏幕
                     case MotionEvent.ACTION_UP:
 
                         Toast.makeText(MainActivity.this,"MotionEvent.ACTION_UP",Toast.LENGTH_SHORT).show();
 
                         break;
 
+                    //当手点击屏幕
                     case MotionEvent.ACTION_DOWN:
                         Toast.makeText(MainActivity.this,"MotionEvent.ACTION_DOWN",Toast.LENGTH_SHORT).show();
                         break;
 
+                    //当手在屏幕上移动
                     case MotionEvent.ACTION_MOVE:
                         Toast.makeText(MainActivity.this,"MotionEvent.ACTION_MOVE",Toast.LENGTH_SHORT).show();
                         break;
