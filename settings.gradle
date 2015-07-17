@@ -1,1 +1,1 @@
-include ':app', ':testviewpage', ':testviewpager', ':testlistview', ':testtablefix',':TableFixHeaders'
+include ':app', ':testviewpage', ':testviewpager', ':testlistview', ':testtablefix',':TableFixHeaders', ':testontouch'
