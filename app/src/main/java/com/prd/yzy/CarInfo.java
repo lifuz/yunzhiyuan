@@ -319,15 +319,17 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
                    ps = new PrintStream(s.getOutputStream());
                    ps.print("cmd Auth\nuserid 9369\npasswd OA==\n\n");
                    ps.flush();
-
                    new SocketThread(ds,s).start();
+                   new HeartBeatThread(ps,ds).start();
+
+
                } catch (IOException e) {
                    e.printStackTrace();
                }
            }
        }.start();
 
-        new HeartBeatThread(ps,ds).start();
+
 
     }
 

@@ -2,6 +2,8 @@ package com.prd.yzy.thread;
 
 import android.util.Log;
 
+import com.prd.yzy.CarInfo;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -50,7 +52,7 @@ public class SocketThread extends Thread {
     public void run() {
 
 
-        while (flag){
+        while (CarInfo.flag){
 
             try {
                 String line = br.readLine();
@@ -80,15 +82,12 @@ public class SocketThread extends Thread {
 
                     String val = st.nextToken();
                     loginInfo.put(key, val);
-                    Log.i("tag","key: "+key+"val: "+val);
-                    if (val.equals("1f==o8==s/==")){
-                        flag = false;
-                    }
+
                 }
 
             } catch (Exception e) {
                 e.printStackTrace();
-               flag = false;
+
             }
 
         }
