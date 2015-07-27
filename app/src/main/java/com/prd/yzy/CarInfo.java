@@ -19,6 +19,7 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.prd.yzy.bean.Car;
+import com.prd.yzy.thread.HeartBeatThread;
 import com.prd.yzy.thread.SocketThread;
 import com.prd.yzy.utils.HttpUrls;
 
@@ -325,6 +326,8 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
                }
            }
        }.start();
+
+        new HeartBeatThread(ps,ds).start();
 
     }
 

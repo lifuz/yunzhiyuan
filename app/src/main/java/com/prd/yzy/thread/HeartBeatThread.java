@@ -1,14 +1,58 @@
 package com.prd.yzy.thread;
 
+import com.prd.yzy.CarInfo;
+
+import java.io.IOException;
+import java.io.PrintStream;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 /**
  * Created by 李富 on 2015/7/27.
  */
 public class HeartBeatThread extends Thread {
 
+    private PrintStream ps;
+    private InetAddress destination;
+    private DatagramSocket ds;
 
+    public HeartBeatThread(PrintStream ps, DatagramSocket ds) {
+        this.ps = ps;
+        this.ds = ds;
+
+        try {
+            destination = InetAddress.getByName("121.40.199.67"); // 需要发送的地址
+        } catch (UnknownHostException e) {
+            System.out.println("Cannot open findhost!");
+            System.exit(1);
+        }
+
+    }
 
     @Override
     public void run() {
 
+        while (CarInfo.flag) {
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            ps.print("cmd Noop\n\n");
+
+            String val = SocketThread.loginInfo.get("key");
+            byte[] buf = val.getBytes();
+            // 打包到DatagramPacket类型中（DatagramSocket的send()方法接受此类，注意7211是接受地址的端口，不同于自己的端口！
+            DatagramPacket dp = new DatagramPacket(buf,
+                    buf.length, destination, 7211);
+            try {
+                ds.send(dp); // 发送数据
+            } catch (IOException e) {
+            }
+
+        }
     }
 }
