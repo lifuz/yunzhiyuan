@@ -2,6 +2,7 @@ package com.prd.yzy;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -66,6 +67,8 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
     private PrintStream ps;
 
     public static boolean flag = true;
+
+    private static int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,6 +140,8 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
 
                     car.setUtc(response.getString("utc"));
 
+                    Log.i("tag",car.getUtc());
+
                     //进行反地理编码
                     initAddress();
 
@@ -182,6 +187,7 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
 
         car_dm = (Button) findViewById(R.id.car_dm);
         car_dm.setOnClickListener(this);
+        car_dm.setVisibility(View.GONE);
 
 
         client = new AsyncHttpClient();
@@ -201,6 +207,17 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
             //设置点击返回时，处理过程
             case R.id.car_back:
                 finish();
+                break;
+            case R.id.car_dm:
+                ps.print("cmd Retr\n" +
+                        "mac 4C55:001400106181\n" +
+                        "app "+(count +1)+"\n" +
+                        "\n" +
+                        "cmd Ctlm\n" +
+                        "mac 4C55:001400106181\n" +
+                        "optcode 2\n" +
+                        "optargs 0\n" +
+                        "app "+(count +1)+"\n\n");
                 break;
         }
 
@@ -277,6 +294,8 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
 
         //给ListView添加适配器
         car_list.setAdapter(adapter);
+
+        car_dm.setVisibility(View.VISIBLE);
 
     }
 
