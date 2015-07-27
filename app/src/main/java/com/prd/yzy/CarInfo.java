@@ -3,6 +3,7 @@ package com.prd.yzy;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -18,12 +19,17 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.prd.yzy.bean.Car;
+import com.prd.yzy.thread.SocketThread;
 import com.prd.yzy.utils.HttpUrls;
 
 import org.apache.http.Header;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.PrintStream;
+import java.net.DatagramSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -50,6 +56,15 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
     private List<Map<String,Object>> listItems;
 
     private ListView car_list;
+
+    private Button car_dm;
+
+    private Socket s;
+    private DatagramSocket ds;
+
+    private PrintStream ps;
+
+    public static boolean flag = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +134,8 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
                         car.setBeforeTimes(response.getString("beforeTimes"));
                     }
 
+                    car.setUtc(response.getString("utc"));
+
                     //进行反地理编码
                     initAddress();
 
@@ -161,6 +178,9 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
         car_name = (TextView) findViewById(R.id.car_name);
 
         car_list = (ListView) findViewById(R.id.car_list);
+
+        car_dm = (Button) findViewById(R.id.car_dm);
+        car_dm.setOnClickListener(this);
 
 
         client = new AsyncHttpClient();
@@ -279,6 +299,45 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
             objectToList(car);
 
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        flag = true;
+
+       new Thread() {
+
+           @Override
+           public void run() {
+               try {
+
+                   s = new Socket("121.40.199.67", 7210);
+                   ds = new DatagramSocket(65411);
+                   ps = new PrintStream(s.getOutputStream());
+                   ps.print("cmd Auth\nuserid 9369\npasswd OA==\n\n");
+                   ps.flush();
+
+                   new SocketThread(ds,s).start();
+               } catch (IOException e) {
+                   e.printStackTrace();
+               }
+           }
+       }.start();
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        ps.print("cmd Quit\n\n");
+        flag = false;
+        ps.flush();
+        ps.close();
+        ds.close();
+
     }
 
     @Override

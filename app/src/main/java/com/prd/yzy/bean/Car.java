@@ -31,6 +31,16 @@ public class Car {
     private String beforeTimes;
     //地址
     private String Address;
+    //utc
+    private String utc;
+
+    public String getUtc() {
+        return utc;
+    }
+
+    public void setUtc(String utc) {
+        this.utc = utc;
+    }
 
     public String getVid() {
         return vid;
@@ -153,6 +163,7 @@ public class Car {
                 ", beforeMiles='" + beforeMiles + '\'' +
                 ", beforeTimes='" + beforeTimes + '\'' +
                 ", Address='" + Address + '\'' +
+                ", utc='" + utc + '\'' +
                 '}';
     }
 }

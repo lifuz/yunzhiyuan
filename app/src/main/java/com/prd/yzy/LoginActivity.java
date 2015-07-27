@@ -112,7 +112,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                     @Override
                     public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                        Toast.makeText(LoginActivity.this,"用户名或密码错误",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "用户名或密码错误", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -120,16 +120,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         try {
 
 
+                            //获取suid的值
+                            String suid = response.getString("desc");
 
-                                //获取suid的值
-                                String suid = response.getString("desc");
-
-                                //把登录信息放入sharepreferences文件中
-                                editor.putString("suid", suid);
-                                editor.commit();
-                                //跳转到mainActivity
-                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-
+                            //把登录信息放入sharepreferences文件中
+                            editor.putString("suid", suid);
+                            editor.putString("username",username.getText().toString());
+                            editor.putString("password",password.getText().toString());
+                            editor.commit();
+                            //跳转到mainActivity
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
 
 
                         } catch (JSONException e) {
@@ -160,7 +160,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         if (arg1 == DialogInterface.BUTTON_POSITIVE) {
                             arg0.cancel();
                         } else if (arg1 == DialogInterface.BUTTON_NEGATIVE) {
-                            EventBus.getDefault().post(new String(),"csuicide");
+                            EventBus.getDefault().post(new String(), "csuicide");
 
                         }
                     }
