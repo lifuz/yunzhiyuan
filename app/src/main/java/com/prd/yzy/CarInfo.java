@@ -1,6 +1,8 @@
 package com.prd.yzy;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,6 +24,7 @@ import com.loopj.android.http.RequestParams;
 import com.prd.yzy.bean.Car;
 import com.prd.yzy.thread.HeartBeatThread;
 import com.prd.yzy.thread.SocketThread;
+import com.prd.yzy.utils.Base64;
 import com.prd.yzy.utils.HttpUrls;
 
 import org.apache.http.Header;
@@ -73,6 +76,7 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
     private static int count = 0;
 
     private SimpleAdapter adapter ;
+    private SharedPreferences share;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,6 +204,7 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
 
         //初始化地理编码查询接口
         gc = GeoCoder.newInstance();
+        share = getSharedPreferences("login", Activity.MODE_PRIVATE);
 
 
     }
@@ -356,10 +361,17 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
             public void run() {
                 try {
 
+                    String opid = share.getString("opid","");
+                    String pass = share.getString("password","");
+
+                    String enStr = new String( Base64.encode(pass.getBytes()));
+
+                    Log.i("tag","opid : " + opid + ", pass : " + enStr + ",pass="+pass);
+
                     s = new Socket("121.40.199.67", 7210);
                     ds = new DatagramSocket(65411);
                     ps = new PrintStream(s.getOutputStream());
-                    ps.print("cmd Auth\nuserid 9369\npasswd OA==\n\n");
+                    ps.print("cmd Auth\nuserid "+opid+"\npasswd "+ enStr+"\n\n");
                     ps.flush();
                     new SocketThread(ds, s).start();
                     new HeartBeatThread(ps, ds).start();
