@@ -30,6 +30,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -55,7 +56,7 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
 
     private Car car;
 
-    private List<Map<String,Object>> listItems;
+    private List<Map<String, Object>> listItems;
 
     private ListView car_list;
 
@@ -67,8 +68,11 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
     private PrintStream ps;
 
     public static boolean flag = true;
+    private boolean ztFlag = true;
 
     private static int count = 0;
+
+    private SimpleAdapter adapter ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,7 +144,9 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
 
                     car.setUtc(response.getString("utc"));
 
-                    Log.i("tag",car.getUtc());
+                    Log.i("tag", car.getUtc());
+
+                    ztFlag = true;
 
                     //进行反地理编码
                     initAddress();
@@ -163,13 +169,12 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
         //设置经纬度的对象
         LatLng ll = new LatLng(Double.parseDouble(car.getLat()), Double.parseDouble(car.getLon()));
 
-        //初始化地理编码查询接口
-        gc = GeoCoder.newInstance();
+
 
         //设置查询结果监听者
         gc.setOnGetGeoCodeResultListener(new MyOnGetGeoCoderResultListener());
 
-       //对给定经纬度进行反地理编码
+        //对给定经纬度进行反地理编码
         gc.reverseGeoCode(new ReverseGeoCodeOption().location(ll));
     }
 
@@ -193,11 +198,15 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
         client = new AsyncHttpClient();
         params = new RequestParams();
 
+        //初始化地理编码查询接口
+        gc = GeoCoder.newInstance();
+
 
     }
 
     /**
      * 处理点击事件
+     *
      * @param v
      */
     @Override
@@ -211,13 +220,13 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
             case R.id.car_dm:
                 ps.print("cmd Retr\n" +
                         "mac 4C55:001400106181\n" +
-                        "app "+(count +1)+"\n" +
+                        "app " + (count + 1) + "\n" +
                         "\n" +
                         "cmd Ctlm\n" +
                         "mac 4C55:001400106181\n" +
                         "optcode 2\n" +
                         "optargs 0\n" +
-                        "app "+(count +1)+"\n\n");
+                        "app " + (count + 1) + "\n\n");
                 break;
         }
 
@@ -226,76 +235,88 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
 
     /**
      * 构建适配器的参数和创建适配器
+     *
      * @param car
      */
-    public void objectToList(Car car){
+    public void objectToList(Car car) {
 
         //构建参数
-        listItems = new ArrayList<Map<String,Object>>();
+        listItems = new ArrayList<Map<String, Object>>();
 
-        Map<String,Object> map = new HashMap<String,Object>();
-        map.put("img",R.drawable.carinfo_ico_speed);
-        map.put("title","速度");
-        map.put("info",car.getSpeed()+" Km/h");
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("img", R.drawable.carinfo_ico_speed);
+        map.put("title", "速度");
+        map.put("info", car.getSpeed() + " Km/h");
         listItems.add(map);
-        map = new HashMap<String,Object>();
-        map.put("img",R.drawable.carinfo_ico_position);
-        map.put("title","位置");
-        map.put("info",car.getAddress());
-        listItems.add(map);
-
-        map = new HashMap<String,Object>();
-        map.put("img",R.drawable.carinfo_ico_company);
-        map.put("title","所属公司");
-        map.put("info",car.getCompanyName());
+        map = new HashMap<String, Object>();
+        map.put("img", R.drawable.carinfo_ico_position);
+        map.put("title", "位置");
+        map.put("info", car.getAddress());
         listItems.add(map);
 
-        map = new HashMap<String,Object>();
-        map.put("img",R.drawable.carinfo_ico_attribute);
-        map.put("title","运营属性");
-        map.put("info","-");
+        map = new HashMap<String, Object>();
+        map.put("img", R.drawable.carinfo_ico_company);
+        map.put("title", "所属公司");
+        map.put("info", car.getCompanyName());
         listItems.add(map);
 
-        map = new HashMap<String,Object>();
-        map.put("img",R.drawable.carinfo_ico_driver);
-        map.put("title","当前司机");
-        map.put("info",car.getDriverName());
+        map = new HashMap<String, Object>();
+        map.put("img", R.drawable.carinfo_ico_attribute);
+        map.put("title", "运营属性");
+        map.put("info", "-");
         listItems.add(map);
 
-        map = new HashMap<String,Object>();
-        map.put("img",R.drawable.carinfo_ico_miles);
-        map.put("title","本月运行里程");
-        map.put("info",car.getMiles()+"公里");
+        map = new HashMap<String, Object>();
+        map.put("img", R.drawable.carinfo_ico_driver);
+        map.put("title", "当前司机");
+        map.put("info", car.getDriverName());
         listItems.add(map);
 
-        map = new HashMap<String,Object>();
-        map.put("img",R.drawable.carinfo_ico_time);
-        map.put("title","本月运行时间");
-        map.put("info",car.getTimes());
+        map = new HashMap<String, Object>();
+        map.put("img", R.drawable.carinfo_ico_miles);
+        map.put("title", "本月运行里程");
+        map.put("info", car.getMiles() + "公里");
         listItems.add(map);
 
-        map = new HashMap<String,Object>();
-        map.put("img",R.drawable.carinfo_ico_miles);
-        map.put("title","上月运行里程");
-        map.put("info",car.getBeforeMiles()+"公里");
+        map = new HashMap<String, Object>();
+        map.put("img", R.drawable.carinfo_ico_time);
+        map.put("title", "本月运行时间");
+        map.put("info", car.getTimes());
         listItems.add(map);
 
-        map = new HashMap<String,Object>();
-        map.put("img",R.drawable.carinfo_ico_time);
-        map.put("title","上月运行时间");
-        map.put("info",car.getBeforeTimes());
+        map = new HashMap<String, Object>();
+        map.put("img", R.drawable.carinfo_ico_miles);
+        map.put("title", "上月运行里程");
+        map.put("info", car.getBeforeMiles() + "公里");
+        listItems.add(map);
+
+        map = new HashMap<String, Object>();
+        map.put("img", R.drawable.carinfo_ico_time);
+        map.put("title", "上月运行时间");
+        map.put("info", car.getBeforeTimes());
         listItems.add(map);
 
 
-        //创建适配器
-        SimpleAdapter adapter = new SimpleAdapter(CarInfo.this,listItems,
-                R.layout.car_item,new String[]{"img","title","info"},
-                new int[]{R.id.info_icon,R.id.info_title,R.id.info_content});
+        if (ztFlag) {
+            //创建适配器
+            adapter = new SimpleAdapter(CarInfo.this, listItems,
+                    R.layout.car_item, new String[]{"img", "title", "info"},
+                    new int[]{R.id.info_icon, R.id.info_title, R.id.info_content});
 
-        //给ListView添加适配器
-        car_list.setAdapter(adapter);
+            //给ListView添加适配器
+            car_list.setAdapter(adapter);
 
-        car_dm.setVisibility(View.VISIBLE);
+            car_dm.setVisibility(View.VISIBLE);
+        } else {
+            adapter = new SimpleAdapter(CarInfo.this, listItems,
+                    R.layout.car_item, new String[]{"img", "title", "info"},
+                    new int[]{R.id.info_icon, R.id.info_title, R.id.info_content});
+
+            //给ListView添加适配器
+            car_list.setAdapter(adapter);
+        }
+
+
 
     }
 
@@ -315,6 +336,8 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
 
 //            Log.i("tag", reverseGeoCodeResult.getAddress());
             car.setAddress(reverseGeoCodeResult.getAddress());
+            Log.i("tag",reverseGeoCodeResult.getAddress());
+            Log.i("tag",car.getAddress() +"  :  " + car.getSpeed());
 
             objectToList(car);
 
@@ -327,27 +350,74 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
 
         flag = true;
 
-       new Thread() {
+        new Thread() {
 
-           @Override
-           public void run() {
-               try {
+            @Override
+            public void run() {
+                try {
 
-                   s = new Socket("121.40.199.67", 7210);
-                   ds = new DatagramSocket(65411);
-                   ps = new PrintStream(s.getOutputStream());
-                   ps.print("cmd Auth\nuserid 9369\npasswd OA==\n\n");
-                   ps.flush();
-                   new SocketThread(ds,s).start();
-                   new HeartBeatThread(ps,ds).start();
+                    s = new Socket("121.40.199.67", 7210);
+                    ds = new DatagramSocket(65411);
+                    ps = new PrintStream(s.getOutputStream());
+                    ps.print("cmd Auth\nuserid 9369\npasswd OA==\n\n");
+                    ps.flush();
+                    new SocketThread(ds, s).start();
+                    new HeartBeatThread(ps, ds).start();
 
 
-               } catch (IOException e) {
-                   e.printStackTrace();
-               }
-           }
-       }.start();
+                    new Thread() {
 
+                        byte[] buf = new byte[4096];
+                        DatagramPacket dp = new DatagramPacket(buf, buf.length);
+
+                        public void run() {
+                            dp.setLength(buf.length);
+                            try {
+                                ds.receive(dp);
+                            } catch (IOException e) {
+                                // TODO Auto-generated catch block
+                                e.printStackTrace();
+                            }
+
+                            String str = new String(dp.getData(), 0, dp.getLength());
+
+
+                            String[] arrStr = str.split(" ");
+                            System.out.println(arrStr[4]);
+                            str = arrStr[4];
+                            arrStr = str.split("\\|");
+
+
+                            long dl = Long.parseLong(arrStr[2], 16);
+                            car.setLat(dl * 1.0/3600000 + "");
+
+                            Log.i("tag", "纬度" + dl);
+
+                            dl = Long.parseLong(arrStr[3], 16);
+                            car.setLon(dl * 1.0/3600000 + "");
+
+                            Log.i("tag", "经度" + dl);
+
+                            dl = Long.parseLong(arrStr[6], 16);
+                            car.setSpeed(dl+"");
+
+                            ztFlag = false;
+
+                            //进行反地理编码
+                            initAddress();
+
+                        }
+
+                        ;
+
+
+                    }.start();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
 
 
     }
