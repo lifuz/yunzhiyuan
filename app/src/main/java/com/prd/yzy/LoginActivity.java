@@ -127,6 +127,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                             editor.putString("suid", suid);
                             editor.putString("username",username.getText().toString());
                             editor.putString("password",password.getText().toString());
+                            editor.putString("opid",response.getString("opid"));
+                            Log.i("tag",response.getString("opid"));
                             editor.commit();
                             //跳转到mainActivity
                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
