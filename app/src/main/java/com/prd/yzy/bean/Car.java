@@ -33,6 +33,16 @@ public class Car {
     private String Address;
     //utc
     private String utc;
+    //mac
+    private String mac;
+
+    public String getMac() {
+        return mac;
+    }
+
+    public void setMac(String mac) {
+        this.mac = mac;
+    }
 
     public String getUtc() {
         return utc;
@@ -164,6 +174,7 @@ public class Car {
                 ", beforeTimes='" + beforeTimes + '\'' +
                 ", Address='" + Address + '\'' +
                 ", utc='" + utc + '\'' +
+                ", mac='" + mac + '\'' +
                 '}';
     }
 }

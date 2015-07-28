@@ -148,7 +148,9 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
 
                     car.setUtc(response.getString("utc"));
 
-                    Log.i("tag", car.getUtc());
+                    car.setMac(response.getString("mac"));
+
+                    Log.i("tag", car.getMac());
 
                     ztFlag = true;
 
@@ -224,11 +226,11 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.car_dm:
                 ps.print("cmd Retr\n" +
-                        "mac 4C55:001400106181\n" +
+                        "mac "+car.getMac()+"\n" +
                         "app " + (count + 1) + "\n" +
                         "\n" +
                         "cmd Ctlm\n" +
-                        "mac 4C55:001400106181\n" +
+                        "mac "+car.getMac()+"\n" +
                         "optcode 2\n" +
                         "optargs 0\n" +
                         "app " + (count + 1) + "\n\n");
@@ -383,40 +385,49 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
                         DatagramPacket dp = new DatagramPacket(buf, buf.length);
 
                         public void run() {
-                            dp.setLength(buf.length);
-                            try {
-                                ds.receive(dp);
-                            } catch (IOException e) {
-                                // TODO Auto-generated catch block
-                                e.printStackTrace();
-                            }
+                           while (true) {
+                               dp.setLength(buf.length);
+                               try {
+                                   ds.receive(dp);
+                               } catch (IOException e) {
+                                   // TODO Auto-generated catch block
+                                   e.printStackTrace();
+                               }
 
-                            String str = new String(dp.getData(), 0, dp.getLength());
+                               String str = new String(dp.getData(), 0, dp.getLength());
+
+                               Log.i("tag",str);
+
+                               String[] arrStr = str.split(" ");
+
+                               Log.i("tag","length" + arrStr.length);
+
+                               if (arrStr.length <=1) {
+                                   return;
+                               }
+
+                               str = arrStr[4];
+                               arrStr = str.split("\\|");
 
 
-                            String[] arrStr = str.split(" ");
-                            System.out.println(arrStr[4]);
-                            str = arrStr[4];
-                            arrStr = str.split("\\|");
+                               long dl = Long.parseLong(arrStr[2], 16);
+                               car.setLat(dl * 1.0/3600000 + "");
 
+                               Log.i("tag", "纬度" + dl);
 
-                            long dl = Long.parseLong(arrStr[2], 16);
-                            car.setLat(dl * 1.0/3600000 + "");
+                               dl = Long.parseLong(arrStr[3], 16);
+                               car.setLon(dl * 1.0/3600000 + "");
 
-                            Log.i("tag", "纬度" + dl);
+                               Log.i("tag", "经度" + dl);
 
-                            dl = Long.parseLong(arrStr[3], 16);
-                            car.setLon(dl * 1.0/3600000 + "");
+                               dl = Long.parseLong(arrStr[6], 16);
+                               car.setSpeed(dl+"");
 
-                            Log.i("tag", "经度" + dl);
+                               ztFlag = false;
 
-                            dl = Long.parseLong(arrStr[6], 16);
-                            car.setSpeed(dl+"");
-
-                            ztFlag = false;
-
-                            //进行反地理编码
-                            initAddress();
+                               //进行反地理编码
+                               initAddress();
+                           }
 
                         }
 
