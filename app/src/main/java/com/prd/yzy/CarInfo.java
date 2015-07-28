@@ -75,7 +75,7 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
 
     private static int count = 0;
 
-    private SimpleAdapter adapter ;
+    private SimpleAdapter adapter;
     private SharedPreferences share;
 
     @Override
@@ -176,7 +176,6 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
         LatLng ll = new LatLng(Double.parseDouble(car.getLat()), Double.parseDouble(car.getLon()));
 
 
-
         //设置查询结果监听者
         gc.setOnGetGeoCodeResultListener(new MyOnGetGeoCoderResultListener());
 
@@ -226,11 +225,11 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.car_dm:
                 ps.print("cmd Retr\n" +
-                        "mac "+car.getMac()+"\n" +
+                        "mac " + car.getMac() + "\n" +
                         "app " + (count + 1) + "\n" +
                         "\n" +
                         "cmd Ctlm\n" +
-                        "mac "+car.getMac()+"\n" +
+                        "mac " + car.getMac() + "\n" +
                         "optcode 2\n" +
                         "optargs 0\n" +
                         "app " + (count + 1) + "\n\n");
@@ -324,7 +323,6 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
         }
 
 
-
     }
 
     /**
@@ -343,19 +341,22 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
 
 //            Log.i("tag", reverseGeoCodeResult.getAddress());
             car.setAddress(reverseGeoCodeResult.getAddress());
-            Log.i("tag",reverseGeoCodeResult.getAddress());
-            Log.i("tag",car.getAddress() +"  :  " + car.getSpeed());
+            Log.i("tag", reverseGeoCodeResult.getAddress());
+            Log.i("tag", car.getAddress() + "  :  " + car.getSpeed());
 
             objectToList(car);
 
         }
     }
 
+
+    /**
+     * socket通讯
+     * 当页面被显示出来就就建立socket连接。
+     */
     @Override
     protected void onResume() {
         super.onResume();
-
-        flag = true;
 
         new Thread() {
 
@@ -363,71 +364,92 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
             public void run() {
                 try {
 
-                    String opid = share.getString("opid","");
-                    String pass = share.getString("password","");
+                    //获取登录信息
+                    String opid = share.getString("opid", "");
+                    String pass = share.getString("password", "");
 
-                    String enStr = new String( Base64.encode(pass.getBytes()));
+                    //对密码进行编码
+                    String enStr = new String(Base64.encode(pass.getBytes()));
 
-                    Log.i("tag","opid : " + opid + ", pass : " + enStr + ",pass="+pass);
+                    Log.i("tag", "opid : " + opid + ", pass : " + enStr + ",pass=" + pass);
 
+                    //与121.40.199.67的服务器建立连接
                     s = new Socket("121.40.199.67", 7210);
+
+                    //连接建立完成后，把标志位改为true；
+                    flag = true;
+
+                    //设置udp通讯的端口号
                     ds = new DatagramSocket(65411);
+
+                    //获取socket链路的输出流
                     ps = new PrintStream(s.getOutputStream());
-                    ps.print("cmd Auth\nuserid "+opid+"\npasswd "+ enStr+"\n\n");
+                    //向服务器发送登录信息
+                    ps.print("cmd Auth\nuserid " + opid + "\npasswd " + enStr + "\n\n");
                     ps.flush();
+                    //开启socket接收通道的线程
                     new SocketThread(ds, s).start();
+                    //开启心跳机制，即定时向服务器发送固定的消息，以确认通道的畅通性
                     new HeartBeatThread(ps, ds).start();
 
-
+                    //开启udp数据接收线程
                     new Thread() {
-
+                        //定义一次接收的数据的长度
                         byte[] buf = new byte[4096];
+                        //将接收的数据打包到这个对象
                         DatagramPacket dp = new DatagramPacket(buf, buf.length);
 
                         public void run() {
-                           while (true) {
-                               dp.setLength(buf.length);
-                               try {
-                                   ds.receive(dp);
-                               } catch (IOException e) {
-                                   // TODO Auto-generated catch block
-                                   e.printStackTrace();
-                               }
+                            //循环等待接收数据
+                            while (true) {
+                                //设置包的长度
+                                dp.setLength(buf.length);
+                                try {
+                                    //将程序挂起，等待数据包，并将接收到的数据打包到的dp对象中
+                                    ds.receive(dp);
+                                } catch (IOException e) {
+                                    // TODO Auto-generated catch block
+                                    e.printStackTrace();
+                                }
 
-                               String str = new String(dp.getData(), 0, dp.getLength());
+                                //将接收到的数据包，转换成字符串
+                                String str = new String(dp.getData(), 0, dp.getLength());
 
-                               Log.i("tag",str);
+                                Log.i("tag", str);
 
-                               String[] arrStr = str.split(" ");
+                                //处理数据
+                                String[] arrStr = str.split(" ");
 
-                               Log.i("tag","length" + arrStr.length);
+                                Log.i("tag", "length" + arrStr.length);
 
-                               if (arrStr.length <=1) {
-                                   return;
-                               }
+                                //当数组的长度为小于或等于1，则直接跳过下面的部分
+                                if (arrStr.length <= 1) {
+                                    return;
+                                }
 
-                               str = arrStr[4];
-                               arrStr = str.split("\\|");
+                                //对数据的处理
+                                str = arrStr[4];
+                                arrStr = str.split("\\|");
 
 
-                               long dl = Long.parseLong(arrStr[2], 16);
-                               car.setLat(dl * 1.0/3600000 + "");
+                                long dl = Long.parseLong(arrStr[2], 16);
+                                car.setLat(dl * 1.0 / 3600000 + "");
 
-                               Log.i("tag", "纬度" + dl);
+                                Log.i("tag", "纬度" + dl);
 
-                               dl = Long.parseLong(arrStr[3], 16);
-                               car.setLon(dl * 1.0/3600000 + "");
+                                dl = Long.parseLong(arrStr[3], 16);
+                                car.setLon(dl * 1.0 / 3600000 + "");
 
-                               Log.i("tag", "经度" + dl);
+                                Log.i("tag", "经度" + dl);
 
-                               dl = Long.parseLong(arrStr[6], 16);
-                               car.setSpeed(dl+"");
+                                dl = Long.parseLong(arrStr[6], 16);
+                                car.setSpeed(dl + "");
 
-                               ztFlag = false;
+                                ztFlag = false;
 
-                               //进行反地理编码
-                               initAddress();
-                           }
+                                //进行反地理编码
+                                initAddress();
+                            }
 
                         }
 
@@ -445,13 +467,19 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
 
     }
 
+    /**
+     * 当页面的生命进程到onPause阶段，注销socket通讯
+     */
     @Override
     protected void onPause() {
         super.onPause();
 
+        //发送退出登录的消息
         ps.print("cmd Quit\n\n");
+        //把标志符设成false
         flag = false;
         ps.flush();
+        //关闭udp和输出流的
         ps.close();
         ds.close();
 

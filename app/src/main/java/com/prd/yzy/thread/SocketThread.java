@@ -17,6 +17,8 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 /**
+ * 接收socket通讯的消息
+ *
  * Created by 李富 on 2015/7/24.
  */
 public class SocketThread extends Thread {
@@ -55,12 +57,15 @@ public class SocketThread extends Thread {
         while (CarInfo.flag){
 
             try {
+                //按行读取消息
                 String line = br.readLine();
 
+                //处理空行
                 if(line.equals("")) {
                     continue;
                 }
 
+                //处理接收到的数据
                 StringTokenizer st =  new StringTokenizer(line, " \t", false);
                 String key = st.nextToken();
                 if (key.equals("version")) {

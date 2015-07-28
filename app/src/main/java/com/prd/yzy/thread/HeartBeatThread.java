@@ -10,6 +10,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 /**
+ * 心跳机制
+ *
  * Created by 李富 on 2015/7/27.
  */
 public class HeartBeatThread extends Thread {
@@ -31,10 +33,16 @@ public class HeartBeatThread extends Thread {
 
     }
 
+    /**
+     * 定时向服务器发送固定的消息，已确认数据链路的畅通
+     */
+
     @Override
     public void run() {
 
         while (CarInfo.flag) {
+
+
             try {
                 Thread.sleep(10000);
             } catch (InterruptedException e) {
