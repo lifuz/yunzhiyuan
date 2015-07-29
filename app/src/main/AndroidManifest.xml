@@ -38,6 +38,7 @@
         <activity android:name=".gj.BOMActivity"/>
         <activity android:name=".gj.SheBeiActivity"/>
         <activity android:name=".gj.XiaoshouActivity"/>
+        <activity android:name=".gj.ShengChanActivity"/>
     </application>
 
 </manifest>

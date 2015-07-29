@@ -12,6 +12,7 @@ import com.prd.yzy.R;
 import com.prd.yzy.gj.BOMActivity;
 import com.prd.yzy.gj.EmployeeActivity;
 import com.prd.yzy.gj.SheBeiActivity;
+import com.prd.yzy.gj.ShengChanActivity;
 import com.prd.yzy.gj.XiaoshouActivity;
 
 /**
@@ -100,7 +101,7 @@ public class GuanJiaFragment extends Fragment implements View.OnClickListener {
 
             case R.id.gj_sc:
 
-                startActivity(new Intent(getActivity(), EmployeeActivity.class));
+                startActivity(new Intent(getActivity(), ShengChanActivity.class));
                 break;
 
             case R.id.gj_oa:
