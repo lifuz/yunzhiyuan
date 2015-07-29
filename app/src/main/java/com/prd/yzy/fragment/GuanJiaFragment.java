@@ -12,6 +12,8 @@ import com.prd.yzy.R;
 import com.prd.yzy.gj.EmployeeActivity;
 
 /**
+ * 管家页面
+ *
  * Created by 李富 on 2015/7/7.
  */
 public class GuanJiaFragment extends Fragment implements View.OnClickListener {
