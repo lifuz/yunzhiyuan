@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.prd.yzy.R;
 import com.prd.yzy.gj.EmployeeActivity;
@@ -81,42 +80,42 @@ public class GuanJiaFragment extends Fragment implements View.OnClickListener {
 
             case R.id.gj_bom:
 
-                Toast.makeText(getActivity(),"你点击了BOM",Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getActivity(), EmployeeActivity.class));
                 break;
 
             case R.id.gj_sb:
 
-                Toast.makeText(getActivity(),"你点击了设备",Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getActivity(), EmployeeActivity.class));
                 break;
 
             case R.id.gj_xs:
 
-                Toast.makeText(getActivity(),"你点击了销售",Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getActivity(), EmployeeActivity.class));
                 break;
 
             case R.id.gj_sc:
 
-                Toast.makeText(getActivity(),"你点击了生产",Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getActivity(), EmployeeActivity.class));
                 break;
 
             case R.id.gj_oa:
 
-                Toast.makeText(getActivity(),"你点击了OA",Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getActivity(), EmployeeActivity.class));
                 break;
 
             case R.id.gj_cw:
 
-                Toast.makeText(getActivity(),"你点击了财务",Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getActivity(), EmployeeActivity.class));
                 break;
 
             case R.id.gj_kc:
 
-                Toast.makeText(getActivity(),"你点击了库存",Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getActivity(), EmployeeActivity.class));
                 break;
 
             case R.id.gj_cg:
 
-                Toast.makeText(getActivity(),"你点击了采购",Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getActivity(), EmployeeActivity.class));
                 break;
         }
 
