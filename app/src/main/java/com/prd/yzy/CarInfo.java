@@ -157,6 +157,7 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
                     //进行反地理编码
                     initAddress();
 
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -312,7 +313,7 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
             //给ListView添加适配器
             car_list.setAdapter(adapter);
 
-            car_dm.setVisibility(View.VISIBLE);
+//            car_dm.setVisibility(View.VISIBLE);
         } else {
             adapter = new SimpleAdapter(CarInfo.this, listItems,
                     R.layout.car_item, new String[]{"img", "title", "info"},
@@ -453,10 +454,30 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
 
                         }
 
-                        ;
-
 
                     }.start();
+
+
+                    //对设备下发点名指令
+                    //控制循环条件
+                    boolean bn = true;
+                    while (bn) {
+                        //判断条件，如果car对象不无空，Mac的属性已经被赋值，和数据通道是否建立
+                        if (car != null && car.getMac() != null && SocketThread.loginInfo.containsKey("key")
+                                && !SocketThread.loginInfo.get("key").equals("")) {
+                            //发送点名信息。
+                            ps.print("cmd Retr\n" +
+                                    "mac " + car.getMac() + "\n" +
+                                    "app " + (count + 1) + "\n" +
+                                    "\n" +
+                                    "cmd Ctlm\n" +
+                                    "mac " + car.getMac() + "\n" +
+                                    "optcode 2\n" +
+                                    "optargs 0\n" +
+                                    "app " + (count + 1) + "\n\n");
+                            bn = false;
+                        }
+                    }
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -488,7 +509,7 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        gc.destroy();
+//        gc.destroy();
 
     }
 }
