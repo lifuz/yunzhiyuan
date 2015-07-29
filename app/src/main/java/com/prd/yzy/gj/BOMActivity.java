@@ -53,6 +53,7 @@ public class BOMActivity extends BaseActivity  implements View.OnClickListener {
     private MyAdapter adapter;
 
     private View emp_back;
+    private TextView gj_title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +73,9 @@ public class BOMActivity extends BaseActivity  implements View.OnClickListener {
 
         client = new AsyncHttpClient();
         params = new RequestParams();
+
+        gj_title = (TextView) findViewById(R.id.gj_title);
+        gj_title.setText("BOM");
 
         tfh = (TableFixHeaders) findViewById(R.id.yg_table);
         emp_back = findViewById(R.id.emp_search);
@@ -270,15 +274,15 @@ public class BOMActivity extends BaseActivity  implements View.OnClickListener {
             if (row <0) {
                 switch (column){
                     case -1:
-                        return "cid";
+                        return "物料编码";
                     case 0:
-                        return "姓名";
+                        return "物料名称";
                     case 1:
-                        return "手机号";
+                        return "所属产品";
                     case 2:
-                        return "性别";
+                        return "物料描述";
                     case 3:
-                        return "驾驶号";
+                        return "使用机种";
                 }
 
             } else {

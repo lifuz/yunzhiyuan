@@ -35,6 +35,7 @@
         <activity android:name=".MainActivity"/>
         <activity android:name=".CarInfo"/>
         <activity android:name=".gj.EmployeeActivity"/>
+        <activity android:name=".gj.BOMActivity"/>
     </application>
 
 </manifest>
