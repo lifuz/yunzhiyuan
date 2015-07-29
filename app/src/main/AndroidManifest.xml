@@ -40,6 +40,7 @@
         <activity android:name=".gj.XiaoshouActivity"/>
         <activity android:name=".gj.ShengChanActivity"/>
         <activity android:name=".gj.CaiWuActivity"/>
+        <activity android:name=".gj.KuCunActivity"/>
     </application>
 
 </manifest>
