@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.prd.yzy.R;
 import com.prd.yzy.gj.BOMActivity;
 import com.prd.yzy.gj.EmployeeActivity;
+import com.prd.yzy.gj.SheBeiActivity;
 
 /**
  * 管家页面
@@ -88,7 +89,7 @@ public class GuanJiaFragment extends Fragment implements View.OnClickListener {
 
             case R.id.gj_sb:
 
-                startActivity(new Intent(getActivity(), EmployeeActivity.class));
+                startActivity(new Intent(getActivity(), SheBeiActivity.class));
                 break;
 
             case R.id.gj_xs:
