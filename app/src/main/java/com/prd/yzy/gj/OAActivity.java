@@ -3,10 +3,11 @@ package com.prd.yzy.gj;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import com.prd.yzy.BaseActivity;
 import com.prd.yzy.R;
+import com.prd.yzy.gj.oa.PZBBActivity;
+import com.prd.yzy.gj.oa.SBGLBBActivity;
 import com.prd.yzy.gj.oa.SCBBActivity;
 import com.prd.yzy.gj.oa.XSBBActivity;
 
@@ -69,11 +70,11 @@ public class OAActivity extends BaseActivity implements View.OnClickListener {
                 break;
 
             case R.id.oa_pzbb:
-                Toast.makeText(getApplication(),"点击品质报表",Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(OAActivity.this, PZBBActivity.class));
                 break;
 
             case R.id.oa_sbglbb:
-                Toast.makeText(getApplication(),"点击设备管理报表",Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(OAActivity.this, SBGLBBActivity.class));
                 break;
         }
 
