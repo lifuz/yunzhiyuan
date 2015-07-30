@@ -36,7 +36,7 @@ import java.util.List;
 /**
  * Created by 李富 on 2015/7/16.
  */
-public class KuCunActivity extends BaseActivity  implements View.OnClickListener {
+public class CaiGouActivity extends BaseActivity  implements View.OnClickListener {
 
     private List<Customer> customers;
 
@@ -75,7 +75,7 @@ public class KuCunActivity extends BaseActivity  implements View.OnClickListener
         params = new RequestParams();
 
         gj_title = (TextView) findViewById(R.id.gj_title);
-        gj_title.setText("库存");
+        gj_title.setText("采购");
 
         tfh = (TableFixHeaders) findViewById(R.id.yg_table);
         emp_back = findViewById(R.id.emp_search);
@@ -252,7 +252,7 @@ public class KuCunActivity extends BaseActivity  implements View.OnClickListener
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(KuCunActivity.this, customers.get(row).getCname(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CaiGouActivity.this, customers.get(row).getCname(), Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -274,15 +274,15 @@ public class KuCunActivity extends BaseActivity  implements View.OnClickListener
             if (row <0) {
                 switch (column){
                     case -1:
-                        return "物料编码";
+                        return "采购员";
                     case 0:
-                        return "物料名称";
+                        return "采购编号";
                     case 1:
-                        return "物料描述";
+                        return "物料名称";
                     case 2:
-                        return "物料属性";
+                        return "物料编码";
                     case 3:
-                        return "适用机种";
+                        return "供应商";
                 }
 
             } else {

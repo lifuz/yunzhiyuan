@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.prd.yzy.R;
 import com.prd.yzy.gj.BOMActivity;
+import com.prd.yzy.gj.CaiGouActivity;
 import com.prd.yzy.gj.CaiWuActivity;
 import com.prd.yzy.gj.EmployeeActivity;
 import com.prd.yzy.gj.KuCunActivity;
@@ -123,7 +124,7 @@ public class GuanJiaFragment extends Fragment implements View.OnClickListener {
 
             case R.id.gj_cg:
 
-                startActivity(new Intent(getActivity(), EmployeeActivity.class));
+                startActivity(new Intent(getActivity(), CaiGouActivity.class));
                 break;
         }
 
