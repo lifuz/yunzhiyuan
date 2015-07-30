@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.prd.yzy.BaseActivity;
 import com.prd.yzy.R;
+import com.prd.yzy.gj.oa.SCBBActivity;
 import com.prd.yzy.gj.oa.XSBBActivity;
 
 /**
@@ -64,7 +65,7 @@ public class OAActivity extends BaseActivity implements View.OnClickListener {
                 break;
 
             case R.id.oa_scbb:
-                Toast.makeText(getApplication(),"点击生产报表",Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(OAActivity.this, SCBBActivity.class));
                 break;
 
             case R.id.oa_pzbb:
