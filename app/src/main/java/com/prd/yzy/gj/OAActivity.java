@@ -1,11 +1,13 @@
 package com.prd.yzy.gj;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
 import com.prd.yzy.BaseActivity;
 import com.prd.yzy.R;
+import com.prd.yzy.gj.oa.XSBBActivity;
 
 /**
  * Created by 李富 on 2015/7/30.
@@ -56,7 +58,9 @@ public class OAActivity extends BaseActivity implements View.OnClickListener {
                 break;
 
             case R.id.oa_xsbb:
-                Toast.makeText(getApplication(), "点击销售报表", Toast.LENGTH_SHORT).show();
+
+                startActivity(new Intent(OAActivity.this, XSBBActivity.class));
+
                 break;
 
             case R.id.oa_scbb:

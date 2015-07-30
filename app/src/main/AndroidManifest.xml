@@ -43,6 +43,7 @@
         <activity android:name=".gj.KuCunActivity"/>
         <activity android:name=".gj.CaiGouActivity"/>
         <activity android:name=".gj.OAActivity"/>
+        <activity android:name=".gj.oa.XSBBActivity"/>
 
     </application>
 
