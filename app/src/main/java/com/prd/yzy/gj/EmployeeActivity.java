@@ -74,7 +74,7 @@ public class EmployeeActivity extends BaseActivity  implements View.OnClickListe
         params = new RequestParams();
 
         tfh = (TableFixHeaders) findViewById(R.id.yg_table);
-        emp_back = findViewById(R.id.emp_search);
+        emp_back = findViewById(R.id.emp_back);
         emp_back.setOnClickListener(this);
 
         emp_search = (EditText) findViewById(R.id.emp_search);

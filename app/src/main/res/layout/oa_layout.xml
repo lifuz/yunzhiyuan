@@ -11,7 +11,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:id="@+id/emp_back"
+            android:id="@+id/oa_back"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_weight="1">
@@ -61,7 +61,7 @@
         android:orientation="vertical" />
 
     <LinearLayout
-        android:id="@+id/wo_xxtz"
+        android:id="@+id/oa_xsbb"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/my_tab_background_u"
@@ -87,7 +87,7 @@
         android:layout_height="20dp" />
 
     <LinearLayout
-        android:id="@+id/wo_jfgl"
+        android:id="@+id/oa_scbb"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/my_tab_background_u"
@@ -109,7 +109,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/wo_zxk"
+        android:id="@+id/oa_pzbb"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/my_tab_background_u"
@@ -131,7 +131,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/wo_shezhi"
+        android:id="@+id/oa_sbglbb"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/my_tab_background_u"

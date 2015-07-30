@@ -78,7 +78,7 @@ public class CaiGouActivity extends BaseActivity  implements View.OnClickListene
         gj_title.setText("采购");
 
         tfh = (TableFixHeaders) findViewById(R.id.yg_table);
-        emp_back = findViewById(R.id.emp_search);
+        emp_back = findViewById(R.id.emp_back);
         emp_back.setOnClickListener(this);
 
         emp_search = (EditText) findViewById(R.id.emp_search);

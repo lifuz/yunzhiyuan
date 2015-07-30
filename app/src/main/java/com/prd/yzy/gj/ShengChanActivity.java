@@ -78,7 +78,7 @@ public class ShengChanActivity extends BaseActivity  implements View.OnClickList
         gj_title.setText("生产");
 
         tfh = (TableFixHeaders) findViewById(R.id.yg_table);
-        emp_back = findViewById(R.id.emp_search);
+        emp_back = findViewById(R.id.emp_back);
         emp_back.setOnClickListener(this);
 
         emp_search = (EditText) findViewById(R.id.emp_search);
