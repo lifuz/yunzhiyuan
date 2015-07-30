@@ -42,6 +42,8 @@
         <activity android:name=".gj.CaiWuActivity"/>
         <activity android:name=".gj.KuCunActivity"/>
         <activity android:name=".gj.CaiGouActivity"/>
+        <activity android:name=".gj.OAActivity"/>
+
     </application>
 
 </manifest>

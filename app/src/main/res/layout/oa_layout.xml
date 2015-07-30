@@ -54,7 +54,6 @@
     </LinearLayout>
 
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -72,14 +71,20 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
             android:background="@drawable/my_list_txt_background"
+            android:drawableRight="@drawable/yzy_forward"
             android:gravity="center_vertical"
             android:paddingBottom="8dp"
             android:paddingTop="8dp"
-            android:text="@string/wo_xxtz"
+            android:text="销售报表"
             android:textColor="#666666"
             android:textSize="18sp" />
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="20dp" />
 
     <LinearLayout
         android:id="@+id/wo_jfgl"
@@ -92,11 +97,13 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
             android:background="@drawable/my_list_txt_background"
+            android:drawableRight="@drawable/yzy_forward"
             android:gravity="center_vertical"
             android:paddingBottom="8dp"
             android:paddingTop="8dp"
-            android:text="@string/wo_jfgl"
+            android:text="生产报表"
             android:textColor="#666666"
             android:textSize="18sp" />
     </LinearLayout>
@@ -112,11 +119,13 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
             android:background="@drawable/my_list_txt_background"
+            android:drawableRight="@drawable/yzy_forward"
             android:gravity="center_vertical"
             android:paddingBottom="8dp"
             android:paddingTop="8dp"
-            android:text="@string/wo_zsk"
+            android:text="品质报表"
             android:textColor="#666666"
             android:textSize="18sp" />
     </LinearLayout>
@@ -132,11 +141,13 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
             android:background="@drawable/my_list_txt_background"
+            android:drawableRight="@drawable/yzy_forward"
             android:gravity="center_vertical"
             android:paddingBottom="8dp"
             android:paddingTop="8dp"
-            android:text="@string/wo_shezhi"
+            android:text="设备管理报表"
             android:textColor="#666666"
             android:textSize="18sp" />
     </LinearLayout>

@@ -14,6 +14,7 @@ import com.prd.yzy.gj.CaiGouActivity;
 import com.prd.yzy.gj.CaiWuActivity;
 import com.prd.yzy.gj.EmployeeActivity;
 import com.prd.yzy.gj.KuCunActivity;
+import com.prd.yzy.gj.OAActivity;
 import com.prd.yzy.gj.SheBeiActivity;
 import com.prd.yzy.gj.ShengChanActivity;
 import com.prd.yzy.gj.XiaoshouActivity;
@@ -109,7 +110,7 @@ public class GuanJiaFragment extends Fragment implements View.OnClickListener {
 
             case R.id.gj_oa:
 
-                startActivity(new Intent(getActivity(), EmployeeActivity.class));
+                startActivity(new Intent(getActivity(), OAActivity.class));
                 break;
 
             case R.id.gj_cw:
