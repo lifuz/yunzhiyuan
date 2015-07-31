@@ -47,6 +47,8 @@
         <activity android:name=".gj.oa.SCBBActivity"/>
         <activity android:name=".gj.oa.PZBBActivity"/>
         <activity android:name=".gj.oa.SBGLBBActivity"/>
+        <activity android:name=".gj.add.AddEmpActivity"/>
+        <activity android:name=".gj.add.AddBOMAcitivity"/>
 
     </application>
 

@@ -39,7 +39,7 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="添加员工"
+            android:text="添加物料"
             android:textSize="20sp" />
 
         <LinearLayout
@@ -62,7 +62,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/touxiang2"
+            android:src="@drawable/shezhi"
             android:layout_marginLeft="20dp"
             />
         <ImageView
@@ -93,7 +93,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="姓名"
+                            android:text="物料名称"
                             android:textSize="18sp"/>
                         <EditText
                             android:layout_width="match_parent"
@@ -109,7 +109,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="性别"
+                            android:text="物料描述"
                             android:textSize="18sp"/>
                         <EditText
                             android:layout_width="match_parent"
@@ -125,7 +125,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="籍贯"
+                            android:text="供应商"
                             android:textSize="18sp"/>
                         <EditText
                             android:layout_width="match_parent"
@@ -141,61 +141,14 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="身份证"
+                            android:text="初始节拍"
                             android:textSize="18sp"/>
                         <EditText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:maxEms="20"/>
                     </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right"
-                        android:gravity="right"
-                        android:layout_marginBottom="5dp">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="熟练度"
-                            android:textSize="18sp"/>
-                        <EditText
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:maxEms="20"/>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right"
-                        android:gravity="right"
-                        android:layout_marginBottom="5dp">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="技能评价"
-                            android:textSize="18sp"/>
-                        <EditText
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:maxEms="20"/>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right"
-                        android:gravity="right"
-                        android:layout_marginBottom="5dp">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="登录权限"
-                            android:textSize="18sp"/>
-                        <EditText
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:maxEms="20"/>
-                    </LinearLayout>
+
 
 
                 </LinearLayout>
@@ -214,7 +167,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="员工编号"
+                            android:text="物料编码"
                             android:textSize="18sp"/>
                         <EditText
                             android:layout_width="match_parent"
@@ -230,7 +183,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="出生年月"
+                            android:text="适用机种"
                             android:textSize="18sp"/>
                         <EditText
                             android:layout_width="match_parent"
@@ -246,7 +199,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="手机号"
+                            android:text="班产量"
                             android:textSize="18sp"/>
                         <EditText
                             android:layout_width="match_parent"
@@ -262,39 +215,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="现住址"
-                            android:textSize="18sp"/>
-                        <EditText
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:maxEms="20"/>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right"
-                        android:gravity="right"
-                        android:layout_marginBottom="5dp">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="所属部门"
-                            android:textSize="18sp"/>
-                        <EditText
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:maxEms="20"/>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right"
-                        android:gravity="right"
-                        android:layout_marginBottom="5dp">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="工种"
+                            android:text="所属产品"
                             android:textSize="18sp"/>
                         <EditText
                             android:layout_width="match_parent"
@@ -305,7 +226,7 @@
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="添加员工"/>
+                        android:text="确认添加"/>
 
 
                 </LinearLayout>

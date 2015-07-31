@@ -43,7 +43,7 @@
             android:textSize="20sp" />
 
         <LinearLayout
-            android:id="@+id/car_flush"
+            android:id="@+id/gj_add"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="right"

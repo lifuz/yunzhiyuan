@@ -2,6 +2,7 @@ package com.prd.yzy.gj;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import com.loopj.android.http.RequestParams;
 import com.prd.yzy.BaseActivity;
 import com.prd.yzy.R;
 import com.prd.yzy.bean.Customer;
+import com.prd.yzy.gj.add.AddEmpActivity;
 import com.prd.yzy.utils.HttpUrls;
 
 import org.apache.http.Header;
@@ -54,6 +56,8 @@ public class EmployeeActivity extends BaseActivity  implements View.OnClickListe
 
     private View emp_back;
 
+    private View gj_add;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +83,9 @@ public class EmployeeActivity extends BaseActivity  implements View.OnClickListe
 
         emp_search = (EditText) findViewById(R.id.emp_search);
         emp_search.addTextChangedListener(watcher);
+
+        gj_add = findViewById(R.id.gj_add);
+        gj_add.setOnClickListener(this);
 
         String sgid = share.getString("suid","");
 
@@ -130,6 +137,11 @@ public class EmployeeActivity extends BaseActivity  implements View.OnClickListe
         switch (v.getId()){
             case R.id.emp_back:
                 finish();
+                break;
+
+            case R.id.gj_add:
+
+                startActivity(new Intent(EmployeeActivity.this, AddEmpActivity.class));
                 break;
         }
     }
