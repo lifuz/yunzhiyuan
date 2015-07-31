@@ -32,6 +32,18 @@
         <item>电磁阀</item>
         <item>平衡车</item>
     </string-array>
+    <string-array name="in_out_spinner">
+        <item>出库</item>
+        <item>入库</item>
+        <item>盘点</item>
+    </string-array>
+
+    <string-array name="wl_spinner">
+        <item>zn123</item>
+        <item>zn234</item>
+        <item>zn132</item>
+        <item>zn332</item>
+    </string-array>
 
     <string name="cp_prompt">请选择产品</string>
 

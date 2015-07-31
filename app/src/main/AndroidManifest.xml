@@ -50,6 +50,7 @@
         <activity android:name=".gj.add.AddEmpActivity"/>
         <activity android:name=".gj.add.AddBOMAcitivity"/>
         <activity android:name=".gj.add.AddMenuActivity"/>
+        <activity android:name=".gj.add.InOutAcitivity"/>
 
     </application>
 
