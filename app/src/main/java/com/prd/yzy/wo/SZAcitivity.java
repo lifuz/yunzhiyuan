@@ -42,6 +42,7 @@ public class SZAcitivity extends BaseActivity implements View.OnClickListener{
 
 
         share = getSharedPreferences("login", Activity.MODE_PRIVATE);
+        editor = share.edit();
 
     }
 

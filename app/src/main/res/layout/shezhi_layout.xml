@@ -11,7 +11,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:id="@+id/jfgl_back"
+            android:id="@+id/sz_back"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_weight="1">

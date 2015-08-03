@@ -11,7 +11,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:id="@+id/emp_back"
+            android:id="@+id/menu_back"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_weight="1">
@@ -161,6 +161,25 @@
                     android:layout_marginLeft="5dp"
                     android:text="个"
                     android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="交期"
+                    android:textSize="20sp" />
+
+                <com.prd.yzy.widget.DateEditText
+                    android:id="@+id/menu_jq"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
             </LinearLayout>
 
             <LinearLayout
