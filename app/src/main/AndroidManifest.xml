@@ -52,6 +52,7 @@
         <activity android:name=".gj.add.AddMenuActivity"/>
         <activity android:name=".gj.add.InOutAcitivity"/>
         <activity android:name=".wo.JFAcitivity"/>
+        <activity android:name=".wo.SZAcitivity"/>
 
     </application>
 

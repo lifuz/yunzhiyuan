@@ -1,17 +1,17 @@
 package com.prd.yzy.fragment;
 
 import android.app.Activity;
-import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.prd.yzy.LoginActivity;
 import com.prd.yzy.R;
 import com.prd.yzy.wo.JFAcitivity;
+import com.prd.yzy.wo.SZAcitivity;
 
 /**
  * Created by 李富 on 2015/7/7.
@@ -53,17 +53,15 @@ public class WoFragment extends Fragment implements View.OnClickListener{
             //点击设置注销用户，注销之后跳转到登录页面
             case R.id.wo_shezhi:
 
-                //把用户注销
-                editor.putString("suid","");
-                editor.commit();
-
-                startActivity(new Intent(getActivity(), LoginActivity.class));
+                startActivity(new Intent(getActivity(), SZAcitivity.class));
 
                 break;
 
             case R.id.wo_jfgl:
 
                 startActivity(new Intent(getActivity(), JFAcitivity.class));
+
+                break;
         }
 
     }
