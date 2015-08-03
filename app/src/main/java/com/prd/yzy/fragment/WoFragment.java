@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import com.prd.yzy.R;
 import com.prd.yzy.wo.JFAcitivity;
 import com.prd.yzy.wo.SZAcitivity;
+import com.prd.yzy.wo.ZXKAcitivity;
 
 /**
  * Created by 李富 on 2015/7/7.
@@ -23,7 +24,7 @@ public class WoFragment extends Fragment implements View.OnClickListener{
     SharedPreferences shared;
     SharedPreferences.Editor editor;
 
-    private View wo_jfgl;
+    private View wo_jfgl,wo_zxk;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -40,6 +41,9 @@ public class WoFragment extends Fragment implements View.OnClickListener{
 
         wo_jfgl = view.findViewById(R.id.wo_jfgl);
         wo_jfgl.setOnClickListener(this);
+
+        wo_zxk = view.findViewById(R.id.wo_zxk);
+        wo_zxk.setOnClickListener(this);
 
         shared = getActivity().getSharedPreferences("login", Activity.MODE_PRIVATE);
         editor = shared.edit();
@@ -62,6 +66,14 @@ public class WoFragment extends Fragment implements View.OnClickListener{
                 startActivity(new Intent(getActivity(), JFAcitivity.class));
 
                 break;
+
+            case R.id.wo_zxk:
+
+                startActivity(new Intent(getActivity(), ZXKAcitivity.class));
+
+                break;
+
+
         }
 
     }
