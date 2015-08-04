@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,6 +60,7 @@ public class CLActivity extends BaseActivity  implements View.OnClickListener {
     private View gj_add;
 
     private TextView gj_back_title;
+    private ImageView gj_add_iv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +92,8 @@ public class CLActivity extends BaseActivity  implements View.OnClickListener {
         emp_search.addTextChangedListener(watcher);
 
         gj_add = findViewById(R.id.gj_add);
-        gj_add.setVisibility(View.GONE);
+        gj_add_iv = (ImageView) findViewById(R.id.gj_add_iv);
+        gj_add_iv.setVisibility(View.GONE);
 
         gj_back_title = (TextView) findViewById(R.id.gj_back_title);
         gj_back_title.setText("生产");
@@ -238,7 +241,7 @@ public class CLActivity extends BaseActivity  implements View.OnClickListener {
          */
         @Override
         public int getColumnCount() {
-            return 4;
+            return 3;
         }
 
         /**
@@ -310,8 +313,7 @@ public class CLActivity extends BaseActivity  implements View.OnClickListener {
                         return customers.get(row).getCphone();
                     case 2:
                         return customers.get(row).getSex();
-                    case 3:
-                        return customers.get(row).getDriverOperId();
+
                 }
             }
 

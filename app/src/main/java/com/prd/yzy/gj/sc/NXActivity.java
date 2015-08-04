@@ -1,4 +1,4 @@
-package com.prd.yzy.gj;
+package com.prd.yzy.gj.sc;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,11 +10,10 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.PopupMenu;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,8 +25,7 @@ import com.loopj.android.http.RequestParams;
 import com.prd.yzy.BaseActivity;
 import com.prd.yzy.R;
 import com.prd.yzy.bean.Customer;
-import com.prd.yzy.gj.sc.CLActivity;
-import com.prd.yzy.gj.sc.NXActivity;
+import com.prd.yzy.gj.add.AddMenuActivity;
 import com.prd.yzy.utils.HttpUrls;
 
 import org.apache.http.Header;
@@ -41,7 +39,7 @@ import java.util.List;
 /**
  * Created by 李富 on 2015/7/16.
  */
-public class ShengChanActivity extends BaseActivity  implements View.OnClickListener {
+public class NXActivity extends BaseActivity  implements View.OnClickListener {
 
     private List<Customer> customers;
 
@@ -61,7 +59,8 @@ public class ShengChanActivity extends BaseActivity  implements View.OnClickList
     private TextView gj_title;
     private View gj_add;
 
-    private PopupMenu popup;
+    private TextView gj_back_title;
+    private ImageView gj_add_iv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,17 +82,21 @@ public class ShengChanActivity extends BaseActivity  implements View.OnClickList
         params = new RequestParams();
 
         gj_title = (TextView) findViewById(R.id.gj_title);
-        gj_title.setText("生产");
+        gj_title.setText("能效");
 
         tfh = (TableFixHeaders) findViewById(R.id.yg_table);
-        emp_back = findViewById(R.id.emp_back);
+        emp_back = findViewById(R.id.emp_search);
         emp_back.setOnClickListener(this);
 
         emp_search = (EditText) findViewById(R.id.emp_search);
         emp_search.addTextChangedListener(watcher);
 
-        gj_add  = findViewById(R.id.gj_add);
-        gj_add.setOnClickListener(this);
+        gj_add = findViewById(R.id.gj_add);
+        gj_add_iv = (ImageView) findViewById(R.id.gj_add_iv);
+        gj_add_iv.setVisibility(View.GONE);
+
+        gj_back_title = (TextView) findViewById(R.id.gj_back_title);
+        gj_back_title.setText("生产");
 
         String sgid = share.getString("suid","");
 
@@ -149,53 +152,9 @@ public class ShengChanActivity extends BaseActivity  implements View.OnClickList
 
             case R.id.gj_add:
 
-                getPopue(gj_add);
-
+                startActivity(new Intent(NXActivity.this, AddMenuActivity.class));
+                break;
         }
-    }
-
-    public void getPopue(View gj_add) {
-
-        popup = new PopupMenu(this,gj_add);
-        getMenuInflater().inflate(R.menu.popup_sc,popup.getMenu());
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-
-                switch (item.getItemId()){
-                    case R.id.sc_jh:
-                        Toast.makeText(getApplication(),"你点击了计划",Toast.LENGTH_SHORT).show();
-
-                        break;
-
-                    case R.id.sc_cl:
-
-                        startActivity(new Intent(ShengChanActivity.this, CLActivity.class));
-
-                        break;
-
-                    case R.id.sc_nx:
-
-
-                        startActivity(new Intent(ShengChanActivity.this, NXActivity.class));
-
-                        break;
-
-                    case R.id.sc_ry:
-                        Toast.makeText(getApplication(),"你点击了人员",Toast.LENGTH_SHORT).show();
-
-                        break;
-
-
-
-                }
-
-                return false;
-            }
-        });
-
-        popup.show();
-
     }
 
     private TextWatcher watcher = new TextWatcher() {
@@ -312,7 +271,7 @@ public class ShengChanActivity extends BaseActivity  implements View.OnClickList
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(ShengChanActivity.this, customers.get(row).getCname(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(NXActivity.this, customers.get(row).getCname(), Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -334,15 +293,16 @@ public class ShengChanActivity extends BaseActivity  implements View.OnClickList
             if (row <0) {
                 switch (column){
                     case -1:
-                        return "订单号";
+                        return "机台名称";
                     case 0:
-                        return "机号";
+                        return "机台编号";
                     case 1:
-                        return "产品名称";
+                        return "日期";
                     case 2:
-                        return "工序号";
+                        return "标准能耗";
                     case 3:
-                        return "工序名";
+                        return "实际能耗";
+
                 }
 
             } else {
@@ -355,8 +315,10 @@ public class ShengChanActivity extends BaseActivity  implements View.OnClickList
                         return customers.get(row).getCphone();
                     case 2:
                         return customers.get(row).getSex();
+
                     case 3:
                         return customers.get(row).getDriverOperId();
+
                 }
             }
 

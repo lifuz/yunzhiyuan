@@ -55,6 +55,7 @@
         <activity android:name=".wo.SZAcitivity"/>
         <activity android:name=".wo.ZXKAcitivity"/>
         <activity android:name=".gj.sc.CLActivity"/>
+        <activity android:name=".gj.sc.NXActivity"/>
 
     </application>
 
