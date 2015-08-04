@@ -182,7 +182,8 @@ public class ShengChanActivity extends BaseActivity  implements View.OnClickList
                         break;
 
                     case R.id.sc_ry:
-                        Toast.makeText(getApplication(),"你点击了人员",Toast.LENGTH_SHORT).show();
+
+                        startActivity(new Intent(ShengChanActivity.this,EmployeeActivity.class));
 
                         break;
 
