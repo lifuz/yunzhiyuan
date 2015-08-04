@@ -57,6 +57,8 @@
         <activity android:name=".gj.sc.CLActivity"/>
         <activity android:name=".gj.sc.NXActivity"/>
         <activity android:name=".gj.add.AddSBAcitivity"/>
+        <activity android:name=".gj.add.AddCGActivity"/>
+        <activity android:name=".gj.add.AddCWActivity"/>
 
     </application>
 

@@ -24,7 +24,7 @@
                 android:src="@drawable/back" />
 
             <TextView
-                android:id="@+id/gj_back_title"
+                android:id="@+id/menu_back_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -33,7 +33,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/gj_title"
+            android:id="@+id/menu_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
