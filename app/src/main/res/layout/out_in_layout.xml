@@ -11,7 +11,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:id="@+id/emp_back"
+            android:id="@+id/kc_back"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_weight="1">
@@ -78,7 +78,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:text="出入库"/>
+            android:text="物料编码"/>
         <Spinner
             android:id="@+id/wl_spinner"
             android:layout_width="match_parent"

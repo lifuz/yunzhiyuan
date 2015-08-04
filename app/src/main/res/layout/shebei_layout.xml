@@ -11,7 +11,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:id="@+id/emp_back"
+            android:id="@+id/shebei_back"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_weight="1">
