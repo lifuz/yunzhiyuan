@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/sc_jh"
+        android:title="计划"
+        />
+
+    <item
+        android:id="@+id/sc_cl"
+        android:title="产量" />
+
+    <item
+        android:id="@+id/sc_nx"
+        android:title="能效" />
+
+    <item
+        android:id="@+id/sc_ry"
+        android:title="人员" />
+
+
+</menu>

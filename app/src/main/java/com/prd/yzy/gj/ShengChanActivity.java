@@ -9,9 +9,11 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,6 +56,9 @@ public class ShengChanActivity extends BaseActivity  implements View.OnClickList
 
     private View emp_back;
     private TextView gj_title;
+    private View gj_add;
+
+    private PopupMenu popup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +88,9 @@ public class ShengChanActivity extends BaseActivity  implements View.OnClickList
 
         emp_search = (EditText) findViewById(R.id.emp_search);
         emp_search.addTextChangedListener(watcher);
+
+        gj_add  = findViewById(R.id.gj_add);
+        gj_add.setOnClickListener(this);
 
         String sgid = share.getString("suid","");
 
@@ -135,7 +143,53 @@ public class ShengChanActivity extends BaseActivity  implements View.OnClickList
             case R.id.emp_back:
                 finish();
                 break;
+
+            case R.id.gj_add:
+
+                getPopue(gj_add);
+
         }
+    }
+
+    public void getPopue(View gj_add) {
+
+        popup = new PopupMenu(this,gj_add);
+        getMenuInflater().inflate(R.menu.popup_sc,popup.getMenu());
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+
+                switch (item.getItemId()){
+                    case R.id.sc_jh:
+                        Toast.makeText(getApplication(),"你点击了计划",Toast.LENGTH_SHORT).show();
+
+                        break;
+
+                    case R.id.sc_cl:
+                        Toast.makeText(getApplication(),"你点击了产量",Toast.LENGTH_SHORT).show();
+
+                        break;
+
+                    case R.id.sc_nx:
+                        Toast.makeText(getApplication(),"你点击了能效",Toast.LENGTH_SHORT).show();
+
+                        break;
+
+                    case R.id.sc_ry:
+                        Toast.makeText(getApplication(),"你点击了人员",Toast.LENGTH_SHORT).show();
+
+                        break;
+
+
+
+                }
+
+                return false;
+            }
+        });
+
+        popup.show();
+
     }
 
     private TextWatcher watcher = new TextWatcher() {
