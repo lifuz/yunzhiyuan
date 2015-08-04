@@ -54,6 +54,7 @@
         <activity android:name=".wo.JFAcitivity"/>
         <activity android:name=".wo.SZAcitivity"/>
         <activity android:name=".wo.ZXKAcitivity"/>
+        <activity android:name=".gj.sc.CLActivity"/>
 
     </application>
 
