@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,14 +13,18 @@ import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SimpleAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.prd.yzy.CarInfo;
 import com.prd.yzy.LoginActivity;
 import com.prd.yzy.R;
 import com.prd.yzy.bean.Car;
@@ -50,11 +55,11 @@ public class XHBFragment extends Fragment {
 
     private SharedPreferences shared;
 
-    private  String suid;
+    private String suid;
 
     private List<Car> cars;
 
-
+    private Spinner xhb_spinner;
 
     private Display display;
 
@@ -75,7 +80,6 @@ public class XHBFragment extends Fragment {
     private List<LinearLayout> waterfall_items;
 
 
-
 //    private List<Map<String,String>> listItems;
 //    private Map<String,String> listItem;
 
@@ -85,7 +89,7 @@ public class XHBFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View layout = inflater.inflate( R.layout.xhb_layout,container,false);
+        View layout = inflater.inflate(R.layout.xhb_layout, container, false);
         return layout;
     }
 
@@ -112,7 +116,7 @@ public class XHBFragment extends Fragment {
             e.printStackTrace();
         }
 
-        Log.i("tag",list_image.toString());
+        Log.i("tag", list_image.toString());
 
 //        xhb_list = (ListView) view.findViewById(R.id.xhb_list);
 //        et = (EditText) view.findViewById(R.id.num);
@@ -129,21 +133,23 @@ public class XHBFragment extends Fragment {
 
 //        et.addTextChangedListener(watcher);
 
-        if("".equals(suid)){
+        if ("".equals(suid)) {
             startActivity(new Intent(getActivity(), LoginActivity.class));
         } else {
-            params.put("sgid",suid);
+            params.put("sgid", suid);
         }
 
-       initLazyScroll(view);
+        initLazyScroll(view);
+
+        initSpinner(view);
 
 
-        client.post(HttpUrls.http_xhb,params, new JsonHttpResponseHandler(){
+        client.post(HttpUrls.http_xhb, params, new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
 
-                for(int i = 0 ; i <response.length();i++){
+                for (int i = 0; i < response.length(); i++) {
                     try {
                         JSONObject obj = response.getJSONObject(i);
 
@@ -152,15 +158,16 @@ public class XHBFragment extends Fragment {
                         car.setName(obj.getString("name"));
                         car.setDesc(obj.getString("desc"));
 
-                        if (i%2 ==0) {
-                            car.setPicFile("images/"+list_image.get(3));
+                        if (i % 2 == 0) {
+                            car.setPicFile("images/" + list_image.get(3));
+                            car.setDesc("4");
                         } else {
-                            car.setPicFile("images/"+list_image.get(4));
+                            car.setPicFile("images/" + list_image.get(4));
                         }
 
                         car.setAssetManager(assetManager);
 
-                        Log.i("tag","images/"+car.getPicFile());
+                        Log.i("tag", "images/" + car.getPicFile());
 
                         cars.add(car);
                         pre_cars.add(car);
@@ -170,7 +177,7 @@ public class XHBFragment extends Fragment {
                     }
                 }
 
-                addItemToContainer(current_page,page_count);
+                addItemToContainer(current_page, page_count);
 
 //                listItems = new ArrayList<Map<String, String>>();
 //
@@ -209,7 +216,51 @@ public class XHBFragment extends Fragment {
 
     }
 
-    private void addItemToContainer(int pageIndex,int page_count) {
+    private void initSpinner(View view) {
+
+        xhb_spinner = (Spinner) view.findViewById(R.id.xhb_zt_spinner);
+        final String[] arr = {"全部","1", "2", "3", "4", "5"};
+        //设置spinner的样式和下拉的值
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.select_dialog_singlechoice, arr);
+
+        xhb_spinner.setAdapter(adapter);
+
+        xhb_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                cars.clear();
+
+                if(arr[position].equals("全部")) {
+                   cars.addAll(pre_cars);
+                } else {
+                    for(Car car:pre_cars) {
+                        if(arr[position].equals(car.getDesc())) {
+                            cars.add(car);
+                        }
+                    }
+                }
+
+
+                clearLineaLayout();
+                current_page = 0;
+                addItemToContainer(current_page, page_count);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+    }
+
+    private void clearLineaLayout() {
+        for(LinearLayout ll:waterfall_items) {
+            ll.removeAllViews();
+        }
+    }
+
+    private void addItemToContainer(int pageIndex, int page_count) {
         int j = 0;
         int imageCount = cars.size();
 
@@ -222,17 +273,34 @@ public class XHBFragment extends Fragment {
     }
 
 
-    private void addItem(Car car,int columnIndex) {
+    private void addItem(final Car car, int columnIndex) {
         LinearLayout item = (LinearLayout) LayoutInflater.from(getActivity())
                 .inflate(R.layout.xhb_waterfall_item, null);
 
-        ImageView xhb_iv = (ImageView)item.findViewById(R.id.xhb_waterfall_pic);
+        ImageView xhb_iv = (ImageView) item.findViewById(R.id.xhb_waterfall_pic);
         TextView xhb_name = (TextView) item.findViewById(R.id.xhb_waterfall_name);
         TextView xhb_zt = (TextView) item.findViewById(R.id.xhb_waterfall_zt);
         xhb_name.setText(car.getName());
         xhb_zt.setText("机车状态：" + car.getDesc());
 
+        LinearLayout item2 = new LinearLayout(getActivity());
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(itemWidth, 3);
+        item2.setLayoutParams(params);
+        item2.setBackgroundColor(Color.GRAY);
+
         waterfall_items.get(columnIndex).addView(item);
+        waterfall_items.get(columnIndex).addView(item2);
+
+        item.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent it = new Intent(getActivity(), CarInfo.class);
+
+                it.putExtra("vid", car.getVid());
+
+                startActivity(it);
+            }
+        });
 
         ImageLoaderTask task = new ImageLoaderTask(xhb_iv);
         task.execute(car);
@@ -278,7 +346,7 @@ public class XHBFragment extends Fragment {
                     LinearLayout.LayoutParams.WRAP_CONTENT);
 
             //设置组件的间隔
-            itemLayout.setPadding(2,2,2,2);
+            itemLayout.setPadding(2, 2, 2, 2);
 
             //设置线性布局的方向，这里设置是垂直方向
             itemLayout.setOrientation(LinearLayout.VERTICAL);
@@ -288,7 +356,6 @@ public class XHBFragment extends Fragment {
             waterfall_items.add(itemLayout);
             //把布局放入waterfall_container中
             waterfall_container.addView(itemLayout);
-
 
 
         }
