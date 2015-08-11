@@ -160,9 +160,10 @@ public class XHBFragment extends Fragment {
 
                         if (i % 2 == 0) {
                             car.setPicFile("images/" + list_image.get(3));
-                            car.setDesc("4");
+                            car.setDesc("离线");
                         } else {
                             car.setPicFile("images/" + list_image.get(4));
+                            car.setDesc("在线");
                         }
 
                         car.setAssetManager(assetManager);
@@ -219,7 +220,7 @@ public class XHBFragment extends Fragment {
     private void initSpinner(View view) {
 
         xhb_spinner = (Spinner) view.findViewById(R.id.xhb_zt_spinner);
-        final String[] arr = {"全部","1", "2", "3", "4", "5"};
+        final String[] arr = {"全部","离线", "在线"};
         //设置spinner的样式和下拉的值
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.select_dialog_singlechoice, arr);
 
