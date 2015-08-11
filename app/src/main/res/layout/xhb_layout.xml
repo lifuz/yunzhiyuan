@@ -78,9 +78,17 @@
             android:textSize="20sp" />
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/xhb_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+   <com.prd.yzy.widget.LazyScrollView
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:id="@+id/xhb_waterfall_scroll">
+
+       <LinearLayout
+           android:id="@+id/xhb_waterfall_container"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:orientation="horizontal"/>
+
+   </com.prd.yzy.widget.LazyScrollView>
 
 </LinearLayout>

@@ -1,5 +1,7 @@
 package com.prd.yzy.bean;
 
+import android.content.res.AssetManager;
+
 /**
  * Created by 李富 on 2015/7/9.
  */
@@ -35,6 +37,9 @@ public class Car {
     private String utc;
     //mac
     private String mac;
+    //picture路径
+    private String picFile;
+    private AssetManager assetManager;
 
     public String getMac() {
         return mac;
@@ -155,6 +160,22 @@ public class Car {
 
     public void setAddress(String address) {
         Address = address;
+    }
+
+    public String getPicFile() {
+        return picFile;
+    }
+
+    public void setPicFile(String picFile) {
+        this.picFile = picFile;
+    }
+
+    public AssetManager getAssetManager() {
+        return assetManager;
+    }
+
+    public void setAssetManager(AssetManager assetManager) {
+        this.assetManager = assetManager;
     }
 
     @Override
