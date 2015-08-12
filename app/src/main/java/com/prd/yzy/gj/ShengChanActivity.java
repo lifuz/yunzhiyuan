@@ -86,6 +86,8 @@ public class ShengChanActivity extends BaseActivity  implements View.OnClickList
         gj_title.setText("生产");
 
         tfh = (TableFixHeaders) findViewById(R.id.yg_table);
+        tfh.setVisibility(View.GONE);
+
         emp_back = findViewById(R.id.emp_back);
         emp_back.setOnClickListener(this);
 
@@ -135,6 +137,7 @@ public class ShengChanActivity extends BaseActivity  implements View.OnClickList
 
                 adapter = new MyAdapter(getApplicationContext());
                 tfh.setAdapter(adapter);
+                tfh.setVisibility(View.VISIBLE);
 
             }
         });

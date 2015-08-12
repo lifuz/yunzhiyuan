@@ -85,6 +85,8 @@ public class NXActivity extends BaseActivity  implements View.OnClickListener {
         gj_title.setText("能效");
 
         tfh = (TableFixHeaders) findViewById(R.id.yg_table);
+        tfh.setVisibility(View.GONE);
+
         emp_back = findViewById(R.id.emp_search);
         emp_back.setOnClickListener(this);
 
@@ -138,6 +140,7 @@ public class NXActivity extends BaseActivity  implements View.OnClickListener {
 
                 adapter = new MyAdapter(getApplicationContext());
                 tfh.setAdapter(adapter);
+                tfh.setVisibility(View.VISIBLE);
 
             }
         });

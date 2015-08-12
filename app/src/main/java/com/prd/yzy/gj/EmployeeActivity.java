@@ -78,6 +78,7 @@ public class EmployeeActivity extends BaseActivity  implements View.OnClickListe
         params = new RequestParams();
 
         tfh = (TableFixHeaders) findViewById(R.id.yg_table);
+        tfh.setVisibility(View.GONE);
         emp_back = findViewById(R.id.emp_back);
         emp_back.setOnClickListener(this);
 
@@ -127,6 +128,7 @@ public class EmployeeActivity extends BaseActivity  implements View.OnClickListe
 
                 adapter = new MyAdapter(getApplicationContext());
                 tfh.setAdapter(adapter);
+                tfh.setVisibility(View.VISIBLE);
 
             }
         });

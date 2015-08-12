@@ -82,6 +82,8 @@ public class SheBeiActivity extends BaseActivity  implements View.OnClickListene
         gj_title.setText("设备");
 
         tfh = (TableFixHeaders) findViewById(R.id.yg_table);
+        tfh.setVisibility(View.GONE);
+
         emp_back = findViewById(R.id.emp_back);
         emp_back.setOnClickListener(this);
 
@@ -131,6 +133,7 @@ public class SheBeiActivity extends BaseActivity  implements View.OnClickListene
 
                 adapter = new MyAdapter(getApplicationContext());
                 tfh.setAdapter(adapter);
+                tfh.setVisibility(View.VISIBLE);
 
             }
         });

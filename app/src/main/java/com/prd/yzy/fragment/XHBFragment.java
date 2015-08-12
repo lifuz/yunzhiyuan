@@ -64,7 +64,7 @@ public class XHBFragment extends Fragment {
     private Display display;
 
     private int column_count = 3; //显示列数
-    private int row_count = 3;//显示行数
+    private int row_count = 4;//显示行数
     private int itemWidth; //每列的宽度；
     private int itemHeight;//每行高度
 
@@ -288,6 +288,9 @@ public class XHBFragment extends Fragment {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(itemWidth, 3);
         item2.setLayoutParams(params);
         item2.setBackgroundColor(Color.GRAY);
+
+        params = new LinearLayout.LayoutParams(itemWidth,itemHeight);
+        item.setLayoutParams(params);
 
         waterfall_items.get(columnIndex).addView(item);
         waterfall_items.get(columnIndex).addView(item2);

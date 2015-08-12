@@ -81,6 +81,8 @@ public class XiaoshouActivity extends BaseActivity  implements View.OnClickListe
         gj_title.setText("销售");
 
         tfh = (TableFixHeaders) findViewById(R.id.yg_table);
+        tfh.setVisibility(View.GONE);
+
         emp_back = findViewById(R.id.emp_search);
         emp_back.setOnClickListener(this);
 
@@ -130,6 +132,8 @@ public class XiaoshouActivity extends BaseActivity  implements View.OnClickListe
 
                 adapter = new MyAdapter(getApplicationContext());
                 tfh.setAdapter(adapter);
+
+                tfh.setVisibility(View.VISIBLE);
 
             }
         });

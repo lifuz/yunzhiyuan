@@ -82,6 +82,7 @@ public class XSBBActivity extends BaseActivity  implements View.OnClickListener 
         gj_back_title.setText("报表");
 
         tfh = (TableFixHeaders) findViewById(R.id.yg_table);
+        tfh.setVisibility(View.GONE);
         emp_back = findViewById(R.id.emp_back);
         emp_back.setOnClickListener(this);
 
@@ -128,6 +129,7 @@ public class XSBBActivity extends BaseActivity  implements View.OnClickListener 
 
                 adapter = new MyAdapter(getApplicationContext());
                 tfh.setAdapter(adapter);
+                tfh.setVisibility(View.VISIBLE);
 
             }
         });

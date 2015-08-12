@@ -81,6 +81,8 @@ public class CaiWuActivity extends BaseActivity  implements View.OnClickListener
         gj_title.setText("财务");
 
         tfh = (TableFixHeaders) findViewById(R.id.yg_table);
+        tfh.setVisibility(View.GONE);
+
         emp_back = findViewById(R.id.emp_back);
         emp_back.setOnClickListener(this);
 
@@ -130,6 +132,7 @@ public class CaiWuActivity extends BaseActivity  implements View.OnClickListener
 
                 adapter = new MyAdapter(getApplicationContext());
                 tfh.setAdapter(adapter);
+                tfh.setVisibility(View.VISIBLE);
 
             }
         });
