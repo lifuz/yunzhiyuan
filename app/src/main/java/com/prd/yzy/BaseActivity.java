@@ -2,6 +2,8 @@ package com.prd.yzy;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
 
 import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
@@ -30,4 +32,16 @@ public class BaseActivity extends Activity {
         finish();
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if(keyCode == KeyEvent.KEYCODE_HOME) {
+
+            Log.i("tag","点击了Home键");
+
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
 }

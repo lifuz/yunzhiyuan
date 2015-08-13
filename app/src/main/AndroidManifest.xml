@@ -2,14 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.prd.yzy" >
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.GET_TASKS" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
     <application
@@ -17,7 +17,6 @@
         android:icon="@drawable/yzy_tubiao"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="UKpxvXe8uYZVcOXYCi0rGj9Q" />
@@ -31,35 +30,39 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".MainActivity" />
+        <activity android:name=".CarInfo" />
+        <activity android:name=".gj.EmployeeActivity" />
+        <activity android:name=".gj.BOMActivity" />
+        <activity android:name=".gj.SheBeiActivity" />
+        <activity android:name=".gj.XiaoshouActivity" />
+        <activity android:name=".gj.ShengChanActivity" />
+        <activity android:name=".gj.CaiWuActivity" />
+        <activity android:name=".gj.KuCunActivity" />
+        <activity android:name=".gj.CaiGouActivity" />
+        <activity android:name=".gj.OAActivity" />
+        <activity android:name=".gj.oa.XSBBActivity" />
+        <activity android:name=".gj.oa.SCBBActivity" />
+        <activity android:name=".gj.oa.PZBBActivity" />
+        <activity android:name=".gj.oa.SBGLBBActivity" />
+        <activity android:name=".gj.add.AddEmpActivity" />
+        <activity android:name=".gj.add.AddBOMAcitivity" />
+        <activity android:name=".gj.add.AddMenuActivity" />
+        <activity android:name=".gj.add.InOutAcitivity" />
+        <activity android:name=".wo.JFAcitivity" />
+        <activity android:name=".wo.SZAcitivity" />
+        <activity android:name=".wo.ZXKAcitivity" />
+        <activity android:name=".gj.sc.CLActivity" />
+        <activity android:name=".gj.sc.NXActivity" />
+        <activity android:name=".gj.add.AddSBAcitivity" />
+        <activity android:name=".gj.add.AddCGActivity" />
+        <activity android:name=".gj.add.AddCWActivity" />
 
-        <activity android:name=".MainActivity"/>
-        <activity android:name=".CarInfo"/>
-        <activity android:name=".gj.EmployeeActivity"/>
-        <activity android:name=".gj.BOMActivity"/>
-        <activity android:name=".gj.SheBeiActivity"/>
-        <activity android:name=".gj.XiaoshouActivity"/>
-        <activity android:name=".gj.ShengChanActivity"/>
-        <activity android:name=".gj.CaiWuActivity"/>
-        <activity android:name=".gj.KuCunActivity"/>
-        <activity android:name=".gj.CaiGouActivity"/>
-        <activity android:name=".gj.OAActivity"/>
-        <activity android:name=".gj.oa.XSBBActivity"/>
-        <activity android:name=".gj.oa.SCBBActivity"/>
-        <activity android:name=".gj.oa.PZBBActivity"/>
-        <activity android:name=".gj.oa.SBGLBBActivity"/>
-        <activity android:name=".gj.add.AddEmpActivity"/>
-        <activity android:name=".gj.add.AddBOMAcitivity"/>
-        <activity android:name=".gj.add.AddMenuActivity"/>
-        <activity android:name=".gj.add.InOutAcitivity"/>
-        <activity android:name=".wo.JFAcitivity"/>
-        <activity android:name=".wo.SZAcitivity"/>
-        <activity android:name=".wo.ZXKAcitivity"/>
-        <activity android:name=".gj.sc.CLActivity"/>
-        <activity android:name=".gj.sc.NXActivity"/>
-        <activity android:name=".gj.add.AddSBAcitivity"/>
-        <activity android:name=".gj.add.AddCGActivity"/>
-        <activity android:name=".gj.add.AddCWActivity"/>
-
+        <service
+            android:name=".service.TraceAgentService"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
     </application>
 
 </manifest>
