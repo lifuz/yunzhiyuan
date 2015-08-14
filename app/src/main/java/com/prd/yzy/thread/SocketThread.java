@@ -2,7 +2,7 @@ package com.prd.yzy.thread;
 
 import android.util.Log;
 
-import com.prd.yzy.CarInfo;
+import com.prd.yzy.service.TraceAgentService;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -54,7 +54,7 @@ public class SocketThread extends Thread {
     public void run() {
 
 
-        while (CarInfo.flag){
+        while (TraceAgentService.flag){
 
             try {
                 //按行读取消息

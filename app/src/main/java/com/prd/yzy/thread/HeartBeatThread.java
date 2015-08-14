@@ -1,6 +1,6 @@
 package com.prd.yzy.thread;
 
-import com.prd.yzy.CarInfo;
+import com.prd.yzy.service.TraceAgentService;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -40,7 +40,7 @@ public class HeartBeatThread extends Thread {
     @Override
     public void run() {
 
-        while (CarInfo.flag) {
+        while (TraceAgentService.flag) {
 
 
             try {

@@ -22,20 +22,17 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.prd.yzy.bean.Car;
-import com.prd.yzy.thread.HeartBeatThread;
+import com.prd.yzy.service.TraceAgentService;
 import com.prd.yzy.thread.SocketThread;
-import com.prd.yzy.utils.Base64;
 import com.prd.yzy.utils.HttpUrls;
 
 import org.apache.http.Header;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.simple.eventbus.EventBus;
 
 import java.io.IOException;
-import java.io.PrintStream;
 import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -65,10 +62,6 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
 
     private Button car_dm;
 
-    private Socket s;
-    private DatagramSocket ds;
-
-    private PrintStream ps;
 
     public static boolean flag = true;
     private boolean ztFlag = true;
@@ -78,6 +71,8 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
     private SimpleAdapter adapter;
     private SharedPreferences share;
 
+    public static int licount = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +81,7 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
         SDKInitializer.initialize(getApplicationContext());
 
         setContentView(R.layout.car_layout);
+
 
         //初始化组件
         initViews();
@@ -198,7 +194,7 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
 
         car_dm = (Button) findViewById(R.id.car_dm);
         car_dm.setOnClickListener(this);
-        car_dm.setVisibility(View.GONE);
+//        car_dm.setVisibility(View.GONE);
 
 
         client = new AsyncHttpClient();
@@ -225,15 +221,7 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
                 finish();
                 break;
             case R.id.car_dm:
-                ps.print("cmd Retr\n" +
-                        "mac " + car.getMac() + "\n" +
-                        "app " + (count + 1) + "\n" +
-                        "\n" +
-                        "cmd Ctlm\n" +
-                        "mac " + car.getMac() + "\n" +
-                        "optcode 2\n" +
-                        "optargs 0\n" +
-                        "app " + (count + 1) + "\n\n");
+//                ps.print();
                 break;
         }
 
@@ -247,6 +235,10 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
      */
     public void objectToList(Car car) {
 
+
+        Log.i("tag","适配器" + car.getAddress() + car.getSpeed());
+
+
         //构建参数
         listItems = new ArrayList<Map<String, Object>>();
 
@@ -254,6 +246,7 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
         map.put("img", R.drawable.carinfo_ico_speed);
         map.put("title", "速度");
         map.put("info", car.getSpeed() + " Km/h");
+        Log.i("tag",car.getSpeed());
         listItems.add(map);
         map = new HashMap<String, Object>();
         map.put("img", R.drawable.carinfo_ico_position);
@@ -304,27 +297,20 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
         listItems.add(map);
 
 
-        if (ztFlag) {
-            //创建适配器
-            adapter = new SimpleAdapter(CarInfo.this, listItems,
-                    R.layout.car_item, new String[]{"img", "title", "info"},
-                    new int[]{R.id.info_icon, R.id.info_title, R.id.info_content});
+        adapter = new SimpleAdapter(CarInfo.this, listItems,
+                R.layout.car_item, new String[]{"img", "title", "info"},
+                new int[]{R.id.info_icon, R.id.info_title, R.id.info_content});
 
-            //给ListView添加适配器
-            car_list.setAdapter(adapter);
 
-//            car_dm.setVisibility(View.VISIBLE);
-        } else {
-            adapter = new SimpleAdapter(CarInfo.this, listItems,
-                    R.layout.car_item, new String[]{"img", "title", "info"},
-                    new int[]{R.id.info_icon, R.id.info_title, R.id.info_content});
+        Log.i("tag","到这里了");
 
-            //给ListView添加适配器
-            car_list.setAdapter(adapter);
-        }
+        //给ListView添加适配器
+        car_list.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
 
 
     }
+
 
     /**
      * 查询结果监听者
@@ -359,114 +345,57 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
     protected void onResume() {
         super.onResume();
 
+        if (TraceAgentService.isRunning) {
+
+        } else {
+            Log.i("tag", "开启服务");
+            startService(new Intent(CarInfo.this, TraceAgentService.class));
+        }
+
+
         new Thread() {
 
             @Override
             public void run() {
                 try {
 
-                    //获取登录信息
-                    String opid = share.getString("opid", "");
-                    String pass = share.getString("password", "");
-
-                    //对密码进行编码
-                    String enStr = new String(Base64.encode(pass.getBytes()));
-
-                    Log.i("tag", "opid : " + opid + ", pass : " + enStr + ",pass=" + pass);
-
-                    //与121.40.199.67的服务器建立连接
-                    s = new Socket("121.40.199.67", 7210);
-
-                    //连接建立完成后，把标志位改为true；
-                    flag = true;
-
-                    //设置udp通讯的端口号
-                    ds = new DatagramSocket(65411);
-
-                    //获取socket链路的输出流
-                    ps = new PrintStream(s.getOutputStream());
-                    //向服务器发送登录信息
-                    ps.print("cmd Auth\nuserid " + opid + "\npasswd " + enStr + "\n\n");
-                    ps.flush();
-                    //开启socket接收通道的线程
-                    new SocketThread(ds, s).start();
-                    //开启心跳机制，即定时向服务器发送固定的消息，以确认通道的畅通性
-                    new HeartBeatThread(ps, ds).start();
-
-                    //开启udp数据接收线程
-                    new Thread() {
-                        //定义一次接收的数据的长度
-                        byte[] buf = new byte[4096];
-                        //将接收的数据打包到这个对象
-                        DatagramPacket dp = new DatagramPacket(buf, buf.length);
-
-                        public void run() {
-                            //循环等待接收数据
-                            while (true) {
-                                //设置包的长度
-                                dp.setLength(buf.length);
-                                try {
-                                    //将程序挂起，等待数据包，并将接收到的数据打包到的dp对象中
-                                    ds.receive(dp);
-                                } catch (IOException e) {
-                                    // TODO Auto-generated catch block
-                                    e.printStackTrace();
-                                }
-
-                                //将接收到的数据包，转换成字符串
-                                String str = new String(dp.getData(), 0, dp.getLength());
-
-                                Log.i("tag", str);
-
-                                //处理数据
-                                String[] arrStr = str.split(" ");
-
-                                Log.i("tag", "length" + arrStr.length);
-
-                                //当数组的长度为小于或等于1，则直接跳过下面的部分
-                                if (arrStr.length <= 1) {
-                                    return;
-                                }
-
-                                //对数据的处理
-                                str = arrStr[4];
-                                arrStr = str.split("\\|");
-
-
-                                long dl = Long.parseLong(arrStr[2], 16);
-                                car.setLat(dl * 1.0 / 3600000 + "");
-
-                                Log.i("tag", "纬度" + dl);
-
-                                dl = Long.parseLong(arrStr[3], 16);
-                                car.setLon(dl * 1.0 / 3600000 + "");
-
-                                Log.i("tag", "经度" + dl);
-
-                                dl = Long.parseLong(arrStr[6], 16);
-                                car.setSpeed(dl + "");
-
-                                ztFlag = false;
-
-                                //进行反地理编码
-                                initAddress();
-                            }
-
-                        }
-
-
-                    }.start();
-
-
                     //对设备下发点名指令
                     //控制循环条件
                     boolean bn = true;
                     while (bn) {
+
+                        if (TraceAgentService.socket == null) {
+                            Log.i("tag", "线程开了吗");
+                            continue;
+                        }
+
+
+                        if (!TraceAgentService.flag) {
+                            Log.i("tag", "登录成功了吗");
+                            continue;
+                        }
+
+//                        Log.i("tag",car.toString());
+//
+//                        Log.i("tag", car.getMac());
+//                        Log.i("tag",SocketThread.loginInfo.containsKey("key") + "");
+//                        Log.i("tag",SocketThread.loginInfo.get("key").equals("") + "");
+//                        Log.i("tag","访问网络的线程开启");
                         //判断条件，如果car对象不无空，Mac的属性已经被赋值，和数据通道是否建立
                         if (car != null && car.getMac() != null && SocketThread.loginInfo.containsKey("key")
                                 && !SocketThread.loginInfo.get("key").equals("")) {
-                            //发送点名信息。
-                            ps.print("cmd Retr\n" +
+//                            //发送点名信息。
+//                            ps.print("cmd Retr\n" +
+//                                    "mac " + car.getMac() + "\n" +
+//                                    "app " + (count + 1) + "\n" +
+//                                    "\n" +
+//                                    "cmd Ctlm\n" +
+//                                    "mac " + car.getMac() + "\n" +
+//                                    "optcode 2\n" +
+//                                    "optargs 0\n" +
+//                                    "app " + (count + 1) + "\n\n");
+
+                            String str = "cmd Retr\n" +
                                     "mac " + car.getMac() + "\n" +
                                     "app " + (count + 1) + "\n" +
                                     "\n" +
@@ -474,12 +403,76 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
                                     "mac " + car.getMac() + "\n" +
                                     "optcode 2\n" +
                                     "optargs 0\n" +
-                                    "app " + (count + 1) + "\n\n");
+                                    "app " + (count + 1) + "\n\n";
+
+                            EventBus.getDefault().post(str, "event");
+
+                            Log.i("tag", "jinqule");
                             bn = false;
                         }
                     }
 
-                } catch (IOException e) {
+
+                    //定义一次接收的数据的长度
+                    byte[] buf = new byte[4096];
+                    //将接收的数据打包到这个对象
+                    DatagramPacket dp = new DatagramPacket(buf, buf.length);
+
+
+                    //循环等待接收数据
+                    while (true) {
+                        //设置包的长度
+                        dp.setLength(buf.length);
+                        try {
+                            //将程序挂起，等待数据包，并将接收到的数据打包到的dp对象中
+                            TraceAgentService.ds.receive(dp);
+                        } catch (IOException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+
+                        //将接收到的数据包，转换成字符串
+                        String str = new String(dp.getData(), 0, dp.getLength());
+
+                        Log.i("tag", str);
+
+                        //处理数据
+                        String[] arrStr = str.split(" ");
+
+                        Log.i("tag", "length" + arrStr.length);
+
+                        //当数组的长度为小于或等于1，则直接跳过下面的部分
+                        if (arrStr.length <= 1) {
+                            return;
+                        }
+
+                        //对数据的处理
+                        str = arrStr[4];
+                        arrStr = str.split("\\|");
+
+
+                        long dl = Long.parseLong(arrStr[2], 16);
+                        Log.i("tag", "纬度" + arrStr[2]);
+                        car.setLat(dl * 1.0 / 3600000 + "");
+
+                        Log.i("tag", "纬度" + dl);
+
+                        dl = Long.parseLong(arrStr[3], 16);
+                        car.setLon(dl * 1.0 / 3600000 + "");
+
+                        Log.i("tag", "经度" + dl);
+
+                        dl = Long.parseLong(arrStr[6], 16);
+                        car.setSpeed(dl + "");
+
+                        ztFlag = false;
+
+                        //进行反地理编码
+                        initAddress();
+                    }
+
+
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -495,14 +488,23 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
     protected void onPause() {
         super.onPause();
 
-        //发送退出登录的消息
-        ps.print("cmd Quit\n\n");
-        //把标志符设成false
-        flag = false;
-        ps.flush();
-        //关闭udp和输出流的
-        ps.close();
-        ds.close();
+        if (car != null) {
+            String str = "cmd Abor\n" +
+                    "mac " + car.getMac() + "\n" +
+                    "app " + (count + 1) + "\n" +
+                    "\n\n";
+            EventBus.getDefault().post(str, "event");
+        }
+
+
+//        //发送退出登录的消息
+//        ps.print("cmd Quit\n\n");
+//        //把标志符设成false
+//        flag = false;
+//        ps.flush();
+//        //关闭udp和输出流的
+//        ps.close();
+//        ds.close();
 
     }
 

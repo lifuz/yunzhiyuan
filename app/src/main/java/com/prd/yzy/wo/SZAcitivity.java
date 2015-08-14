@@ -4,12 +4,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import com.prd.yzy.BaseActivity;
 import com.prd.yzy.LoginActivity;
 import com.prd.yzy.R;
+import com.prd.yzy.service.TraceAgentService;
 
 /**
  * Created by 李富 on 2015/8/3.
@@ -61,7 +63,10 @@ public class SZAcitivity extends BaseActivity implements View.OnClickListener{
                 //把用户注销
                 editor.putString("suid", "");
                 editor.commit();
-
+                if (TraceAgentService.isRunning) {
+                    Log.i("tag", "jinlai");
+                    stopService(new Intent(SZAcitivity.this, TraceAgentService.class));
+                }
                 startActivity(new Intent(SZAcitivity.this, LoginActivity.class));
 
                 break;

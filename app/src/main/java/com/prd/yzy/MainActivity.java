@@ -2,6 +2,7 @@ package com.prd.yzy;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 
@@ -17,6 +19,8 @@ import com.prd.yzy.fragment.GuanJiaFragment;
 import com.prd.yzy.fragment.MiShuFragment;
 import com.prd.yzy.fragment.WoFragment;
 import com.prd.yzy.fragment.XHBFragment;
+import com.prd.yzy.service.MonitorService;
+import com.prd.yzy.service.TraceAgentService;
 
 import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
@@ -56,6 +60,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         // 将对象注册到事件总线中， ****** 注意要在onDestory中进行注销 ****
         EventBus.getDefault().register(this);
 
+        startService(new Intent(MainActivity.this, MonitorService.class));
         initViews();
     }
 
@@ -249,6 +254,11 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                             arg0.cancel();
                         } else if (arg1 == DialogInterface.BUTTON_NEGATIVE) {
                             EventBus.getDefault().post(new String(), "csuicide");
+
+                            if (TraceAgentService.isRunning) {
+                                Log.i("tag", "jinlai");
+                                stopService(new Intent(MainActivity.this, TraceAgentService.class));
+                            }
                             MainActivity.this.finish();
                         }
                     }
