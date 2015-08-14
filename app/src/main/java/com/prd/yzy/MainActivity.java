@@ -229,6 +229,13 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         EventBus.getDefault().unregister(this);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        EventBus.getDefault().post("关闭定时器", "timeTask");
+    }
+
     /**
      * 用于退出主页面
      *

@@ -29,6 +29,15 @@ public class BaseActivity extends Activity {
         EventBus.getDefault().unregister(this);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+
+        EventBus.getDefault().post("关闭定时器", "timeTask");
+        Log.i("tag", "发送指令");
+    }
+
     //订阅事件
     @Subscriber(tag = "csuicide")
     private void csuicideMyself(String msg) {

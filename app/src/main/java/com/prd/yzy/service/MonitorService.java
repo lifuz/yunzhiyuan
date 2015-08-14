@@ -5,23 +5,35 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
+
+import org.simple.eventbus.EventBus;
+import org.simple.eventbus.Subscriber;
 
 /**
  * 监控系统事件，当屏幕被关闭或者程序进入后台
  * 则关闭TraceAgentService服务
- *
+ * <p/>
  * 作者：李富 on 2015/8/13
  * 邮箱：lifuzz@163.com
  */
 public class MonitorService extends Service {
+
+    private static final int TIMER = 5 * 60 * 1000;
+
+    private static boolean flag = false;
+
     public MonitorService() {
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
+
+        // 将对象注册到事件总线中， ****** 注意要在onDestory中进行注销 ****
+        EventBus.getDefault().register(this);
 
         //定义一个意图过滤对象
         final IntentFilter filter = new IntentFilter();
@@ -38,33 +50,65 @@ public class MonitorService extends Service {
 
                 String action = intent.getAction();
 
-                if(Intent.ACTION_SCREEN_OFF.equals(action)) {
+                if (Intent.ACTION_SCREEN_OFF.equals(action)) {
                     Log.i("Service", "灭屏");
-                    Log.i("Service", TraceAgentService.isRunning + "");
-                    if (TraceAgentService.isRunning) {
-                        Log.i("tag","jinlai");
-
-                        stopService(new Intent(MonitorService.this, TraceAgentService.class));
+                    if (!flag) {
+                        handler.postDelayed(runnable, TIMER);
+                        flag = true;
                     }
 
-                }  else if (Intent.ACTION_CLOSE_SYSTEM_DIALOGS.equals(action)) {
-                    Log.i("Service","boss");
 
+                } else if (Intent.ACTION_CLOSE_SYSTEM_DIALOGS.equals(action)) {
+                    Log.i("Service", "boss");
 
-                    if (TraceAgentService.isRunning) {
-
-
-                        stopService(new Intent(MonitorService.this,TraceAgentService.class));
+                    if (!flag) {
+                        handler.postDelayed(runnable, TIMER);
+                        flag = true;
                     }
                 }
-
 
 
             }
         };
 
-        registerReceiver(broadcastReceiver,filter);
+        registerReceiver(broadcastReceiver, filter);
 
+    }
+
+    //事件处理
+    @Subscriber(tag = "timeTask")
+    private void timeTask(String msg) {
+
+        Log.i("tag","有数据吗");
+        if ("关闭定时器".equals(msg)) {
+            if(flag) {
+                handler.removeCallbacks(runnable);
+                Log.i("tag","关闭定时器");
+            }
+        }
+
+    }
+
+    Handler handler = new Handler();
+
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            handler.postDelayed(this, TIMER);
+            if (TraceAgentService.isRunning) {
+
+
+                stopService(new Intent(MonitorService.this, TraceAgentService.class));
+            }
+        }
+    };
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        // ****** 不要忘了进行注销 ****
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
