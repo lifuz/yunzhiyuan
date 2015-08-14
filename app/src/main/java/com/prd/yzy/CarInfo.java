@@ -1,14 +1,18 @@
 package com.prd.yzy;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.baidu.mapapi.SDKInitializer;
@@ -23,6 +27,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.prd.yzy.bean.Car;
 import com.prd.yzy.service.TraceAgentService;
+import com.prd.yzy.thread.HeartBeatThread;
 import com.prd.yzy.thread.SocketThread;
 import com.prd.yzy.utils.HttpUrls;
 
@@ -68,7 +73,7 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
 
     private static int count = 0;
 
-    private SimpleAdapter adapter;
+    private CarAdapter adapter;
     private SharedPreferences share;
 
     public static int licount = 0;
@@ -82,6 +87,7 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
 
         setContentView(R.layout.car_layout);
 
+        Log.i("tag","onCreate");
 
         //初始化组件
         initViews();
@@ -196,6 +202,8 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
         car_dm.setOnClickListener(this);
 //        car_dm.setVisibility(View.GONE);
 
+        //构建参数
+        listItems = new ArrayList<Map<String, Object>>();
 
         client = new AsyncHttpClient();
         params = new RequestParams();
@@ -236,80 +244,120 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
     public void objectToList(Car car) {
 
 
-        Log.i("tag","适配器" + car.getAddress() + car.getSpeed());
+        Log.i("tag", "适配器" + car.getAddress() + car.getSpeed());
 
+//        List<Map<String,Object>> mapList = new ArrayList<>();
 
-        //构建参数
-        listItems = new ArrayList<Map<String, Object>>();
+        listItems.clear();
 
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("img", R.drawable.carinfo_ico_speed);
         map.put("title", "速度");
         map.put("info", car.getSpeed() + " Km/h");
-        Log.i("tag",car.getSpeed());
+        Log.i("tag", car.getSpeed());
+//        mapList.add(map);
         listItems.add(map);
+
         map = new HashMap<String, Object>();
         map.put("img", R.drawable.carinfo_ico_position);
         map.put("title", "位置");
         map.put("info", car.getAddress());
         listItems.add(map);
+//        mapList.add(map);
 
         map = new HashMap<String, Object>();
         map.put("img", R.drawable.carinfo_ico_company);
         map.put("title", "所属公司");
         map.put("info", car.getCompanyName());
         listItems.add(map);
+//        mapList.add(map);
 
         map = new HashMap<String, Object>();
         map.put("img", R.drawable.carinfo_ico_attribute);
         map.put("title", "运营属性");
         map.put("info", "-");
         listItems.add(map);
+//        mapList.add(map);
 
         map = new HashMap<String, Object>();
         map.put("img", R.drawable.carinfo_ico_driver);
         map.put("title", "当前司机");
         map.put("info", car.getDriverName());
         listItems.add(map);
+//        mapList.add(map);
 
         map = new HashMap<String, Object>();
         map.put("img", R.drawable.carinfo_ico_miles);
         map.put("title", "本月运行里程");
         map.put("info", car.getMiles() + "公里");
         listItems.add(map);
+//        mapList.add(map);
 
         map = new HashMap<String, Object>();
         map.put("img", R.drawable.carinfo_ico_time);
         map.put("title", "本月运行时间");
         map.put("info", car.getTimes());
         listItems.add(map);
+//        mapList.add(map);
 
         map = new HashMap<String, Object>();
         map.put("img", R.drawable.carinfo_ico_miles);
         map.put("title", "上月运行里程");
         map.put("info", car.getBeforeMiles() + "公里");
         listItems.add(map);
+//        mapList.add(map);
 
         map = new HashMap<String, Object>();
         map.put("img", R.drawable.carinfo_ico_time);
         map.put("title", "上月运行时间");
         map.put("info", car.getBeforeTimes());
         listItems.add(map);
+//        mapList.add(map);
 
 
-        adapter = new SimpleAdapter(CarInfo.this, listItems,
-                R.layout.car_item, new String[]{"img", "title", "info"},
-                new int[]{R.id.info_icon, R.id.info_title, R.id.info_content});
+        if (ztFlag) {
+
+            adapter = new CarAdapter(listItems,this);
 
 
-        Log.i("tag","到这里了");
+            Log.i("tag","到这里了");
 
-        //给ListView添加适配器
-        car_list.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+            //给ListView添加适配器
+            car_list.setAdapter(adapter);
+        } else {
+
+            adapter.notifyDataSetChanged();
+
+//            listItems.clear();
+//            listItems.addAll(mapList);
+//
+//            try {
+//                Thread.sleep(1000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+
+//            handler.sendEmptyMessage(1);
+        }
+
+
 
 
     }
+
+//    Handler handler = new Handler() {
+//
+//        @Override
+//        public void handleMessage(Message msg) {
+//
+//            if (msg.what == 1) {
+//                Log.i("tag","刷新了吗");
+//                adapter.setData(listItems);
+//                adapter.notifyDataSetChanged();
+//            }
+//
+//        }
+//    };
 
 
     /**
@@ -365,13 +413,13 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
                     while (bn) {
 
                         if (TraceAgentService.socket == null) {
-                            Log.i("tag", "线程开了吗");
+//                            Log.i("tag", "线程开了吗");
                             continue;
                         }
 
 
-                        if (!TraceAgentService.flag) {
-                            Log.i("tag", "登录成功了吗");
+                        if (!HeartBeatThread.hbFlag) {
+//                            Log.i("tag", "登录成功了吗");
                             continue;
                         }
 
@@ -405,6 +453,7 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
                                     "optargs 0\n" +
                                     "app " + (count + 1) + "\n\n";
 
+//                            Thread.sleep(10000);
                             EventBus.getDefault().post(str, "event");
 
                             Log.i("tag", "jinqule");
@@ -497,6 +546,8 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
         }
 
 
+
+
 //        //发送退出登录的消息
 //        ps.print("cmd Quit\n\n");
 //        //把标志符设成false
@@ -511,7 +562,78 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        gc.destroy();
+
+        car_list = null;
+        Log.i("tag","onDestroy() ");
+        gc.destroy();
 
     }
+
+
+    class CarAdapter extends BaseAdapter {
+
+        private LayoutInflater layoutInflater;
+        private List<Map<String ,Object>> data;
+
+        public CarAdapter(List<Map<String,Object>> data,Context context) {
+
+            this.data = data;
+            layoutInflater = LayoutInflater.from(context);
+
+        }
+
+        public void setData(List<Map<String,Object>> data) {
+            this.data = data;
+            notifyDataSetChanged();
+        }
+
+        class CarItem{
+            public ImageView icon;
+            public TextView title;
+            public TextView content;
+        }
+
+        @Override
+        public int getCount() {
+            return data.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return position;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+
+            CarItem carItem = null;
+
+            if (convertView == null) {
+                carItem = new CarItem();
+
+                convertView = layoutInflater.inflate(R.layout.car_item,null);
+
+                carItem.icon = (ImageView) convertView.findViewById(R.id.info_icon);
+                carItem.title = (TextView) convertView.findViewById(R.id.info_title);
+                carItem.content = (TextView) convertView.findViewById(R.id.info_content);
+                convertView.setTag(carItem);
+
+            } else {
+                carItem = (CarItem)convertView.getTag();
+            }
+
+
+            carItem.icon.setImageResource((Integer)data.get(position).get("img"));
+            carItem.title.setText((String) data.get(position).get("title"));
+            carItem.content.setText((String)data.get(position).get("info"));
+
+            return convertView;
+        }
+    }
+
 }

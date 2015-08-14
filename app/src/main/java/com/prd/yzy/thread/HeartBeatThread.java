@@ -20,6 +20,8 @@ public class HeartBeatThread extends Thread {
     private InetAddress destination;
     private DatagramSocket ds;
 
+    public static boolean hbFlag = false;
+
     public HeartBeatThread(PrintStream ps, DatagramSocket ds) {
         this.ps = ps;
         this.ds = ds;
@@ -58,9 +60,13 @@ public class HeartBeatThread extends Thread {
                     buf.length, destination, 7211);
             try {
                 ds.send(dp); // 发送数据
+                hbFlag = true;
+
             } catch (IOException e) {
             }
 
         }
+
+        hbFlag = false;
     }
 }

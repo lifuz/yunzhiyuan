@@ -83,6 +83,7 @@ public class MonitorService extends Service {
         if ("关闭定时器".equals(msg)) {
             if(flag) {
                 handler.removeCallbacks(runnable);
+                flag = false;
                 Log.i("tag","关闭定时器");
             }
         }
