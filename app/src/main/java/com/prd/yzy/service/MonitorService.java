@@ -21,7 +21,7 @@ import org.simple.eventbus.Subscriber;
  */
 public class MonitorService extends Service {
 
-    private static final int TIMER = 5 * 60 * 1000;
+    private static final int TIMER = 1 * 60 * 1000;
 
     private static boolean flag = false;
 

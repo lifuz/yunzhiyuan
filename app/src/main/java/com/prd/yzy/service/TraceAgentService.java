@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -40,6 +41,10 @@ public class TraceAgentService extends Service {
     public static Thread socket;
 
     public static boolean flag = false;
+
+    private static final int TIMER = 1 * 60 * 1000;
+
+    private static boolean timetask = false;
 
     public TraceAgentService() {
     }
@@ -97,6 +102,46 @@ public class TraceAgentService extends Service {
 
 
     }
+
+    //事件处理
+    @Subscriber(tag = "timeTask")
+    private void timeTask(String msg) {
+
+        Log.i("tag", "有数据吗");
+        if ("关闭定时器".equals(msg)) {
+            if(timetask) {
+                handler.removeCallbacks(runnable);
+                timetask = false;
+                Log.i("tag","关闭定时器");
+            }
+        } else if("开启定时器".equals(msg)){
+
+            if (!timetask) {
+                handler.postDelayed(runnable, TIMER);
+                timetask = true;
+                Log.i("tag","开启定时器");
+            }
+
+        }
+
+    }
+
+
+    /**
+     * 定时器
+     */
+    Handler handler = new Handler();
+
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            handler.postDelayed(this, TIMER);
+            if (TraceAgentService.isRunning) {
+
+                onDestroy();
+            }
+        }
+    };
 
     //事件处理
     @Subscriber(tag = "event")

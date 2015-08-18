@@ -19,7 +19,6 @@ import com.prd.yzy.fragment.GuanJiaFragment;
 import com.prd.yzy.fragment.MiShuFragment;
 import com.prd.yzy.fragment.WoFragment;
 import com.prd.yzy.fragment.XHBFragment;
-import com.prd.yzy.service.MonitorService;
 import com.prd.yzy.service.TraceAgentService;
 
 import org.simple.eventbus.EventBus;
@@ -60,7 +59,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         // 将对象注册到事件总线中， ****** 注意要在onDestory中进行注销 ****
         EventBus.getDefault().register(this);
 
-        startService(new Intent(MainActivity.this, MonitorService.class));
+//        startService(new Intent(MainActivity.this, MonitorService.class));
         initViews();
     }
 

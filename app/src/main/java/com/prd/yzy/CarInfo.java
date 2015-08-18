@@ -175,6 +175,11 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
      * 进行反地理编码
      */
     public void initAddress() {
+
+        if(gc == null) {
+            gc = GeoCoder.newInstance();
+        }
+
         //设置经纬度的对象
         LatLng ll = new LatLng(Double.parseDouble(car.getLat()), Double.parseDouble(car.getLon()));
 
@@ -317,6 +322,10 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
 
         if (ztFlag) {
 
+            if (car_list == null) {
+                car_list = (ListView) findViewById(R.id.car_list);
+            }
+
             adapter = new CarAdapter(listItems,this);
 
 
@@ -326,7 +335,23 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
             car_list.setAdapter(adapter);
         } else {
 
-            adapter.notifyDataSetChanged();
+            if(adapter !=null) {
+                adapter.notifyDataSetChanged();
+            } else {
+                adapter = new CarAdapter(listItems,this);
+
+
+                Log.i("tag","到这里了");
+
+
+                if (car_list == null) {
+                    car_list = (ListView) findViewById(R.id.car_list);
+                }
+
+                //给ListView添加适配器
+                car_list.setAdapter(adapter);
+            }
+
 
 //            listItems.clear();
 //            listItems.addAll(mapList);
@@ -392,6 +417,8 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onResume() {
         super.onResume();
+
+
 
         if (TraceAgentService.isRunning) {
 
@@ -469,7 +496,7 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
 
 
                     //循环等待接收数据
-                    while (true) {
+                    while (TraceAgentService.flag) {
                         //设置包的长度
                         dp.setLength(buf.length);
                         try {
@@ -495,6 +522,12 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
                             return;
                         }
 
+                        str = arrStr[3];
+
+                        if (car == null && !car.getMac().equals(str)) {
+                            continue;
+                        }
+
                         //对数据的处理
                         str = arrStr[4];
                         arrStr = str.split("\\|");
@@ -511,7 +544,7 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
 
                         Log.i("tag", "经度" + dl);
 
-                        dl = Long.parseLong(arrStr[6], 16);
+                        dl = Long.parseLong(arrStr[4], 16);
                         car.setSpeed(dl + "");
 
                         ztFlag = false;
