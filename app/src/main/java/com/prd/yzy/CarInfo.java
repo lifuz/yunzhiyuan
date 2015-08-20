@@ -122,8 +122,8 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
                     if (response.has("driverName")) {
                         car.setDriverName(response.getString("driverName"));
                     }
-                    if (response.has("speed")) {
-                        car.setSpeed(response.getString("speed"));
+                    if (response.has("alt")) {
+                        car.setSpeed(response.getString("alt"));
                     }
                     if (response.has("lat")) {
                         car.setLat(response.getString("lat"));
@@ -148,7 +148,7 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
                         car.setBeforeTimes(response.getString("beforeTimes"));
                     }
 
-                    car.setUtc(response.getString("utc"));
+//                    car.setUtc(response.getString("utc"));
 
                     car.setMac(response.getString("mac"));
 
@@ -557,6 +557,9 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
+                Log.i("tag","udp链路断开");
+
             }
         }.start();
 

@@ -1,5 +1,7 @@
 package com.prd.yzy.thread;
 
+import android.util.Log;
+
 import com.prd.yzy.service.TraceAgentService;
 
 import java.io.IOException;
@@ -67,6 +69,7 @@ public class HeartBeatThread extends Thread {
 
         }
 
+        Log.i("tag","关闭心跳");
         hbFlag = false;
     }
 }

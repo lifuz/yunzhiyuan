@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.util.Log;
 
 import com.prd.yzy.thread.HeartBeatThread;
@@ -44,7 +45,7 @@ public class TraceAgentService extends Service {
 
     private static final int TIMER = 1 * 60 * 1000;
 
-    private static boolean timetask = false;
+    private boolean timetask = false;
 
     public TraceAgentService() {
     }
@@ -110,15 +111,17 @@ public class TraceAgentService extends Service {
         Log.i("tag", "有数据吗");
         if ("关闭定时器".equals(msg)) {
             if(timetask) {
-                handler.removeCallbacks(runnable);
+
                 timetask = false;
                 Log.i("tag","关闭定时器");
             }
         } else if("开启定时器".equals(msg)){
 
             if (!timetask) {
-                handler.postDelayed(runnable, TIMER);
+
                 timetask = true;
+
+                new Thread(runnable).start();
                 Log.i("tag","开启定时器");
             }
 
@@ -130,15 +133,34 @@ public class TraceAgentService extends Service {
     /**
      * 定时器
      */
-    Handler handler = new Handler();
+    Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            if(msg.what ==0x123) {
+                stopService(new Intent(TraceAgentService.this,TraceAgentService.class));
+                timetask = false;
+            }
+        }
+    };
 
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            handler.postDelayed(this, TIMER);
-            if (TraceAgentService.isRunning) {
 
-                onDestroy();
+            int count = 0;
+            while(timetask){
+                try {
+                    Thread.sleep(1000);
+                    count = count + 1;
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                if(count >= 60) {
+                    handler.sendEmptyMessage(0x123);
+                }
+
+
             }
         }
     };
@@ -162,7 +184,7 @@ public class TraceAgentService extends Service {
 
 
 
-        Log.i("tag", "服务关闭");
+//        Log.i("tag", "服务关闭");
         ps.print("cmd Quit\n\n");
         try {
             s.close();
@@ -173,6 +195,9 @@ public class TraceAgentService extends Service {
         flag = false;
         EventBus.getDefault().unregister(this);
         isRunning = false;
+        timetask = false;
+//        handler.removeCallbacks(runnable);
+        Log.i("tag", "服务关闭");
 
 
     }
