@@ -87,6 +87,8 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
 
         setContentView(R.layout.car_layout);
 
+
+
         Log.i("tag","onCreate");
 
         //初始化组件

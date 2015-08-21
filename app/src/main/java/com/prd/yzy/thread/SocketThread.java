@@ -61,6 +61,9 @@ public class SocketThread extends Thread {
                 String line = br.readLine();
 
                 //处理空行
+                if (line == null) {
+                    break;
+                }
                 if(line.equals("")) {
                     continue;
                 }
