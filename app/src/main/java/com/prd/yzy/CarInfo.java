@@ -261,7 +261,7 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
         map.put("img", R.drawable.carinfo_ico_speed);
         map.put("title", "速度");
         map.put("info", car.getSpeed() + " Km/h");
-        Log.i("tag", car.getSpeed());
+//        Log.i("tag", car.getSpeed());
 //        mapList.add(map);
         listItems.add(map);
 

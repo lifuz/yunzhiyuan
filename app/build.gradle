@@ -17,6 +17,19 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+
+    signingConfigs {
+
+        debug {
+
+            storeFile file("E:/stub/lifuz.jks")
+            storePassword "kuzukslxp4"
+            keyAlias "lifuz"
+            keyPassword "kuzukslxp4"
+
+        }
+    }
 }
 
 dependencies {
