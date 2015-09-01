@@ -46,5 +46,6 @@
     </string-array>
 
     <string name="cp_prompt">请选择产品</string>
+    <string name="count">http://121.40.199.67/TrackServer/GetCount</string>
 
 </resources>

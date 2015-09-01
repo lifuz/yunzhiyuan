@@ -94,6 +94,7 @@
     <orderEntry type="library" exported="" name="androideventbus-1.0.4" level="project" />
     <orderEntry type="library" exported="" name="support-v4-21.0.3" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-21.0.3" level="project" />
+    <orderEntry type="library" exported="" name="mpandroidchart" level="project" />
     <orderEntry type="library" exported="" name="android-async-http-1.4.7" level="project" />
     <orderEntry type="library" exported="" name="BaiduLBS_Android" level="project" />
     <orderEntry type="module" module-name="TableFixHeaders" exported="" />

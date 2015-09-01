@@ -39,4 +39,5 @@ dependencies {
     compile files('libs/androideventbus-1.0.4.jar')
     compile files('libs/BaiduLBS_Android.jar')
     compile project(':TableFixHeaders')
+    compile files('libs/mpandroidchart.jar')
 }

@@ -58,6 +58,7 @@
         <activity android:name=".gj.add.AddSBAcitivity" />
         <activity android:name=".gj.add.AddCGActivity" />
         <activity android:name=".gj.add.AddCWActivity" />
+        <activity android:name=".BarChartInfo"/>
 
         <service
             android:name=".service.TraceAgentService"

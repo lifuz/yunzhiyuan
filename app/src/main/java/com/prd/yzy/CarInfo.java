@@ -237,6 +237,9 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.car_dm:
 //                ps.print();
+
+                startActivity(new Intent(CarInfo.this,BarChartInfo.class));
+
                 break;
         }
 

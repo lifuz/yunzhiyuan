@@ -159,10 +159,10 @@ public class XHBFragment extends Fragment {
                         car.setDesc(obj.getString("desc"));
 
                         if (i % 2 == 0) {
-                            car.setPicFile("images/" + list_image.get(3));
+                            car.setPicFile("images/yzy_jc1.jpg");
                             car.setDesc("离线");
                         } else {
-                            car.setPicFile("images/" + list_image.get(4));
+                            car.setPicFile("images/yzy_jc2.png");
                             car.setDesc("在线");
                         }
 
