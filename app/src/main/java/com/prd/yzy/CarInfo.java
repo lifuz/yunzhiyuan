@@ -77,6 +77,7 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
     private SharedPreferences share;
 
     public static int licount = 0;
+    private  String mac ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,6 +156,8 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
                     car.setMac(response.getString("mac"));
 
                     Log.i("tag", car.getMac());
+
+                    mac = response.getString("mac");
 
                     ztFlag = true;
 
@@ -254,7 +257,11 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
     public void objectToList(Car car) {
 
 
-        Log.i("tag", "适配器" + car.getAddress() + car.getSpeed());
+        Log.i("tag", "适配器" + mac);
+
+        if (!car.getMac().equals(mac)) {
+            return;
+        }
 
 //        List<Map<String,Object>> mapList = new ArrayList<>();
 
@@ -527,11 +534,11 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
                             return;
                         }
 
-                        str = arrStr[3];
+                        mac = arrStr[2];
 
-                        if (car == null && !car.getMac().equals(str)) {
-                            continue;
-                        }
+                        Log.i("tag",car.getMac() + "   " +str);
+
+
 
                         //对数据的处理
                         str = arrStr[4];

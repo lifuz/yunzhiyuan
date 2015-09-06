@@ -38,10 +38,13 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ * 实现图表和详情
+ *
  * 作者：李富 on 2015/9/1.
  * 邮箱：lifuzz@163.com
  */
-public class BarChartInfo extends Activity implements View.OnClickListener, OnChartValueSelectedListener {
+public class BarChartInfo extends Activity implements View.OnClickListener,
+        OnChartValueSelectedListener {
 
     private TextView prd_back_title, prd_title;
 
@@ -131,6 +134,9 @@ public class BarChartInfo extends Activity implements View.OnClickListener, OnCh
 
     }
 
+    /**
+     * 给图表加载数据
+     */
     private void setData() {
         //设置x轴的标签
         ArrayList<String> xVals = new ArrayList<>();
@@ -171,9 +177,13 @@ public class BarChartInfo extends Activity implements View.OnClickListener, OnCh
         //立即显示图表
         barChart.animateX(2500);
 
+
     }
 
 
+    /**
+     * 初始化barChart控件
+     */
     private void initBarChart() {
 
         barChart = (BarChart) findViewById(R.id.mpa_bar);
@@ -203,6 +213,8 @@ public class BarChartInfo extends Activity implements View.OnClickListener, OnCh
 
         //设置图表能否缩放
         barChart.setScaleEnabled(false);
+
+        barChart.setDragEnabled(true);
 
         //设置双击是否对图表进行缩放
         barChart.setDoubleTapToZoomEnabled(false);
@@ -249,7 +261,7 @@ public class BarChartInfo extends Activity implements View.OnClickListener, OnCh
     private void initView() {
 
         prd_back_title = (TextView) findViewById(R.id.prd_back_title);
-        prd_back_title.setText("机台信息");
+        prd_back_title.setText("返回");
 
         prd_title = (TextView) findViewById(R.id.prd_title);
         prd_title.setText("工作信息");
@@ -271,6 +283,8 @@ public class BarChartInfo extends Activity implements View.OnClickListener, OnCh
 
     @Override
     public void onNothingSelected() {
+
+
 
     }
 
