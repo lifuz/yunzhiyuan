@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -64,7 +63,7 @@ public class XHBFragment extends Fragment {
     private Display display;
 
     private int column_count = 3; //显示列数
-    private int row_count = 4;//显示行数
+    private int row_count = 5;//显示行数
     private int itemWidth; //每列的宽度；
     private int itemHeight;//每行高度
 
@@ -103,7 +102,7 @@ public class XHBFragment extends Fragment {
 
         shared = getActivity().getSharedPreferences("login", Activity.MODE_PRIVATE);
 
-        suid = shared.getString("suid", "");
+        suid = shared.getString("ogid", "");
 
         cars = new ArrayList<Car>();
         pre_cars = new ArrayList<Car>();
@@ -136,7 +135,7 @@ public class XHBFragment extends Fragment {
         if ("".equals(suid)) {
             startActivity(new Intent(getActivity(), LoginActivity.class));
         } else {
-            params.put("sgid", suid);
+            params.put("ogid", suid);
         }
 
         initLazyScroll(view);
@@ -278,22 +277,27 @@ public class XHBFragment extends Fragment {
         LinearLayout item = (LinearLayout) LayoutInflater.from(getActivity())
                 .inflate(R.layout.xhb_waterfall_item, null);
 
+//        item.setPadding(4,4,4,4);
+
+
+
         ImageView xhb_iv = (ImageView) item.findViewById(R.id.xhb_waterfall_pic);
         TextView xhb_name = (TextView) item.findViewById(R.id.xhb_waterfall_name);
         TextView xhb_zt = (TextView) item.findViewById(R.id.xhb_waterfall_zt);
         xhb_name.setText(car.getName());
         xhb_zt.setText("机车状态：" + car.getDesc());
 
-        LinearLayout item2 = new LinearLayout(getActivity());
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(itemWidth, 3);
-        item2.setLayoutParams(params);
-        item2.setBackgroundColor(Color.GRAY);
+//        LinearLayout item2 = new LinearLayout(getActivity());
+//        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(itemWidth, 3);
+//        item2.setLayoutParams(params);
+//        item2.setBackgroundColor(Color.GRAY);
 
-        params = new LinearLayout.LayoutParams(itemWidth,itemHeight);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(itemWidth,itemHeight);
+        params.setMargins(8,6,8,6);
         item.setLayoutParams(params);
 
         waterfall_items.get(columnIndex).addView(item);
-        waterfall_items.get(columnIndex).addView(item2);
+//        waterfall_items.get(columnIndex).addView(item2);
 
         item.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -349,8 +353,7 @@ public class XHBFragment extends Fragment {
             LinearLayout.LayoutParams itemParam = new LinearLayout.LayoutParams(itemWidth,
                     LinearLayout.LayoutParams.WRAP_CONTENT);
 
-            //设置组件的间隔
-            itemLayout.setPadding(2, 2, 2, 2);
+//            itemLayout.setPadding(3,3,3,3);
 
             //设置线性布局的方向，这里设置是垂直方向
             itemLayout.setOrientation(LinearLayout.VERTICAL);

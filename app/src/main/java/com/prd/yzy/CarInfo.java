@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.geocode.GeoCodeResult;
 import com.baidu.mapapi.search.geocode.GeoCoder;
@@ -35,6 +36,7 @@ import org.apache.http.Header;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.simple.eventbus.EventBus;
+import org.simple.eventbus.Subscriber;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -76,15 +78,10 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
     private CarAdapter adapter;
     private SharedPreferences share;
 
-    public static int licount = 0;
-    private  String mac ;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //在使用SDK各组件之前初始化context信息，传入ApplicationContext
-        //注意该方法要再setContentView方法之前实现
-        SDKInitializer.initialize(getApplicationContext());
+
 
         setContentView(R.layout.car_layout);
 
@@ -157,13 +154,12 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
 
                     Log.i("tag", car.getMac());
 
-                    mac = response.getString("mac");
-
                     ztFlag = true;
 
                     //进行反地理编码
-                    initAddress();
+//                    initAddress();
 
+                    objectToList(car);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -181,9 +177,11 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
      */
     public void initAddress() {
 
-        if(gc == null) {
-            gc = GeoCoder.newInstance();
-        }
+        Log.i("tag","diaoyonglema");
+
+//        if(gc == null) {
+//            gc = GeoCoder.newInstance();
+//        }
 
         //设置经纬度的对象
         LatLng ll = new LatLng(Double.parseDouble(car.getLat()), Double.parseDouble(car.getLon()));
@@ -192,8 +190,17 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
         //设置查询结果监听者
         gc.setOnGetGeoCodeResultListener(new MyOnGetGeoCoderResultListener());
 
+
+        if(gc == null) {
+            gc = GeoCoder.newInstance();
+            gc.reverseGeoCode(new ReverseGeoCodeOption().location(ll));
+        } else{
+            //对给定经纬度进行反地理编码
+            Log.i("tag",gc.reverseGeoCode(new ReverseGeoCodeOption().location(ll)) + "");
+        }
+
         //对给定经纬度进行反地理编码
-        gc.reverseGeoCode(new ReverseGeoCodeOption().location(ll));
+//        gc.reverseGeoCode(new ReverseGeoCodeOption().location(ll));
     }
 
     /**
@@ -257,14 +264,6 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
     public void objectToList(Car car) {
 
 
-        Log.i("tag", "适配器" + mac);
-
-        if (!car.getMac().equals(mac)) {
-            return;
-        }
-
-//        List<Map<String,Object>> mapList = new ArrayList<>();
-
         listItems.clear();
 
         Map<String, Object> map = new HashMap<String, Object>();
@@ -275,11 +274,11 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
 //        mapList.add(map);
         listItems.add(map);
 
-        map = new HashMap<String, Object>();
-        map.put("img", R.drawable.carinfo_ico_position);
-        map.put("title", "位置");
-        map.put("info", car.getAddress());
-        listItems.add(map);
+//        map = new HashMap<String, Object>();
+//        map.put("img", R.drawable.carinfo_ico_position);
+//        map.put("title", "位置");
+//        map.put("info", car.getAddress());
+//        listItems.add(map);
 //        mapList.add(map);
 
         map = new HashMap<String, Object>();
@@ -508,7 +507,7 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
 
 
                     //循环等待接收数据
-                    while (TraceAgentService.flag) {
+                    while (TraceAgentService.flag ||car_list != null ) {
                         //设置包的长度
                         dp.setLength(buf.length);
                         try {
@@ -534,9 +533,13 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
                             return;
                         }
 
-                        mac = arrStr[2];
+                        str = arrStr[2];
 
                         Log.i("tag",car.getMac() + "   " +str);
+
+                        if (!str.equals(car.getMac())) {
+                            continue;
+                        }
 
 
 
@@ -557,12 +560,15 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
                         Log.i("tag", "经度" + dl);
 
                         dl = Long.parseLong(arrStr[4], 16);
+
                         car.setSpeed(dl + "");
+                        Log.i("tag", "speed:" + car.getSpeed());
 
                         ztFlag = false;
 
-                        //进行反地理编码
-                        initAddress();
+                        handler.sendEmptyMessage(0x123);
+
+
                     }
 
 
@@ -577,6 +583,71 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
 
 
     }
+
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+
+            if (msg.what == 0x123){
+                objectToList(car);
+            }
+
+        }
+    };
+
+    //事件处理
+    @Subscriber(tag = "udp")
+    private void udp(String str) {
+        Log.i("tag", str);
+
+            //处理数据
+            String[] arrStr = str.split(" ");
+
+            Log.i("tag", "length" + arrStr.length);
+
+            //当数组的长度为小于或等于1，则直接跳过下面的部分
+            if (arrStr.length <= 1) {
+                return;
+            }
+
+            str = arrStr[2];
+
+
+
+            Log.i("tag",car.getMac() + "   " +str);
+
+            if (!str.equals(car.getMac())) {
+                return;
+            }
+
+
+
+            //对数据的处理
+            str = arrStr[4];
+            arrStr = str.split("\\|");
+
+
+            long dl = Long.parseLong(arrStr[2], 16);
+            Log.i("tag", "纬度" + arrStr[2]);
+            car.setLat(dl * 1.0 / 3600000 + "");
+
+            Log.i("tag", "纬度" + dl);
+
+            dl = Long.parseLong(arrStr[3], 16);
+            car.setLon(dl * 1.0 / 3600000 + "");
+
+            Log.i("tag", "经度" + dl);
+
+            dl = Long.parseLong(arrStr[4], 16);
+
+            car.setSpeed(dl + "");
+            Log.i("tag", "speed:" + car.getSpeed());
+
+            ztFlag = false;
+
+            handler.sendEmptyMessage(0x123);
+    }
+
 
     /**
      * 当页面的生命进程到onPause阶段，注销socket通讯
@@ -611,9 +682,11 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
     protected void onDestroy() {
         super.onDestroy();
 
+        car = null;
         car_list = null;
         Log.i("tag","onDestroy() ");
         gc.destroy();
+        Log.i("tag","杀死反地理编码");
 
     }
 

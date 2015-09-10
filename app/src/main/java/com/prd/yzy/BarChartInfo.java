@@ -175,7 +175,7 @@ public class BarChartInfo extends Activity implements View.OnClickListener,
         l.setEnabled(false);
 
         //立即显示图表
-        barChart.animateX(2500);
+        barChart.animateX(1000);
 
 
     }

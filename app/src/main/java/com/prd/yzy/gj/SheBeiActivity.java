@@ -93,7 +93,7 @@ public class SheBeiActivity extends BaseActivity  implements View.OnClickListene
         gj_add = findViewById(R.id.gj_add);
         gj_add.setOnClickListener(this);
 
-        String sgid = share.getString("suid","");
+        String sgid = share.getString("ogid","");
 
 //        Log.i("tag", "sgid" + sgid);
 
@@ -106,8 +106,8 @@ public class SheBeiActivity extends BaseActivity  implements View.OnClickListene
     }
 
     public void getEmpInfo(String sgid){
-        params.remove("sgid");
-        params.put("sgid", sgid);
+        params.remove("ogid");
+        params.put("ogid", sgid);
         client.post(HttpUrls.http_customer,params,new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {

@@ -83,7 +83,7 @@ public class XiaoshouActivity extends BaseActivity  implements View.OnClickListe
         tfh = (TableFixHeaders) findViewById(R.id.yg_table);
         tfh.setVisibility(View.GONE);
 
-        emp_back = findViewById(R.id.emp_search);
+        emp_back = findViewById(R.id.emp_back);
         emp_back.setOnClickListener(this);
 
         emp_search = (EditText) findViewById(R.id.emp_search);
@@ -92,7 +92,7 @@ public class XiaoshouActivity extends BaseActivity  implements View.OnClickListe
         gj_add = findViewById(R.id.gj_add);
         gj_add.setOnClickListener(this);
 
-        String sgid = share.getString("suid","");
+        String sgid = share.getString("ogid","");
 
 //        Log.i("tag", "sgid" + sgid);
 
@@ -105,11 +105,12 @@ public class XiaoshouActivity extends BaseActivity  implements View.OnClickListe
     }
 
     public void getEmpInfo(String sgid){
-        params.remove("sgid");
-        params.put("sgid", sgid);
+        params.remove("ogid");
+        params.put("ogid", sgid);
         client.post(HttpUrls.http_customer,params,new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                Log.i("tag", "已经获取到了数据");
                 for (int i = 0 ; i<response.length();i++){
                     try {
                         JSONObject object = response.getJSONObject(i);
@@ -118,7 +119,14 @@ public class XiaoshouActivity extends BaseActivity  implements View.OnClickListe
                         customer.setCid(object.getString("cid"));
                         customer.setCname(object.getString("cname"));
                         customer.setCphone(object.getString("cphone"));
-                        customer.setDriverOperId(object.getString("driverOperId"));
+
+                        if (object.has("driverOperId")){
+                            customer.setDriverOperId(object.getString("driverOperId"));
+                        }else {
+                            customer.setDriverOperId("");
+                        }
+
+
                         customer.setSex(object.getString("sex"));
                         customers.add(customer);
                         customerList.add(customer);
@@ -128,7 +136,7 @@ public class XiaoshouActivity extends BaseActivity  implements View.OnClickListe
                     }
                 }
 
-                Log.i("tag", "已经获取到了数据");
+                Log.i("tag", "数据解析完成");
 
                 adapter = new MyAdapter(getApplicationContext());
                 tfh.setAdapter(adapter);

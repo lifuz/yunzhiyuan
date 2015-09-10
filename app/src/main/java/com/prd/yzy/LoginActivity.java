@@ -128,6 +128,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                             editor.putString("username",username.getText().toString());
                             editor.putString("password",password.getText().toString());
                             editor.putString("opid",response.getString("opid"));
+                            editor.putString("ogid",response.getString("ogid"));
                             Log.i("tag",response.getString("opid"));
                             editor.commit();
                             //跳转到mainActivity

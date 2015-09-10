@@ -11,6 +11,7 @@ import android.util.Log;
 
 import com.prd.yzy.thread.HeartBeatThread;
 import com.prd.yzy.thread.SocketThread;
+import com.prd.yzy.thread.UdpThread;
 import com.prd.yzy.utils.Base64;
 
 import org.simple.eventbus.EventBus;
@@ -46,6 +47,8 @@ public class TraceAgentService extends Service {
     private static final int TIMER = 1 * 60 * 1000;
 
     private boolean timetask = false;
+
+    private UdpThread udpThread;
 
     public TraceAgentService() {
     }
@@ -92,6 +95,9 @@ public class TraceAgentService extends Service {
                     new SocketThread(ds, s).start();
                     //开启心跳机制，即定时向服务器发送固定的消息，以确认通道的畅通性
                     new HeartBeatThread(ps, ds).start();
+
+                    udpThread = new UdpThread();
+                    udpThread.start();
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -182,7 +188,7 @@ public class TraceAgentService extends Service {
         super.onDestroy();
         // ****** 不要忘了进行注销 ****
 
-
+        udpThread.interrupt();
 
 //        Log.i("tag", "服务关闭");
         ps.print("cmd Quit\n\n");

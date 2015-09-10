@@ -56,6 +56,10 @@ public class HeartBeatThread extends Thread {
             ps.print("cmd Noop\n\n");
 
             String val = SocketThread.loginInfo.get("key");
+
+            if (val == null){
+                continue;
+            }
             byte[] buf = val.getBytes();
             // 打包到DatagramPacket类型中（DatagramSocket的send()方法接受此类，注意7211是接受地址的端口，不同于自己的端口！
             DatagramPacket dp = new DatagramPacket(buf,
