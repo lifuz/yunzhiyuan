@@ -101,7 +101,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                 Log.i("tag", username.getText().toString());
                 try {
-                    params.put("passWord", password.getText().toString());
+                    params.put("passWord",MyUtil.encrypt(password.getText().toString()));
                     Log.i("tag", MyUtil.encrypt(password.getText().toString()));
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -38,8 +38,6 @@ import org.json.JSONObject;
 import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
 
-import java.io.IOException;
-import java.net.DatagramPacket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -67,13 +65,14 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
 
     private ListView car_list;
 
-    private Button car_dm;
+    private Button car_dm,car_pz;
 
 
     public static boolean flag = true;
     private boolean ztFlag = true;
 
-    private static int count = 0;
+    private int count = 0;
+    private int sum = 1;
 
     private CarAdapter adapter;
     private SharedPreferences share;
@@ -217,6 +216,9 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
 
         car_dm = (Button) findViewById(R.id.car_dm);
         car_dm.setOnClickListener(this);
+        car_pz = (Button) findViewById(R.id.car_pz);
+        car_pz.setOnClickListener(this);
+        car_pz.setVisibility(View.GONE);
 //        car_dm.setVisibility(View.GONE);
 
         //构建参数
@@ -249,6 +251,31 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
 //                ps.print();
 
                 startActivity(new Intent(CarInfo.this,BarChartInfo.class));
+
+                break;
+
+            case R.id.car_pz:
+                String str = "";
+
+                if (sum % 2 == 0) {
+                    str = "cmd Ctlm\n" +
+                            "mac " + car.getMac() + "\n" +
+                            "optcode 73\n" +
+                            "optargs 2;1;1;B4;0;1;1;0;0;0;0\n" +
+                            "app "+count +"\n\n";
+                    car_pz.setText("开启");
+                } else {
+                    str = "cmd Ctlm\n" +
+                            "mac " + car.getMac() + "\n" +
+                            "optcode 73\n" +
+                            "optargs 1;1;1;B4;0;1;1;0;0;0;0\n" +
+                            "app "+count +"\n\n";
+                    car_pz.setText("关闭");
+                }
+
+
+                sum++;
+                EventBus.getDefault().post(str, "event");
 
                 break;
         }
@@ -376,7 +403,7 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
 //            handler.sendEmptyMessage(1);
         }
 
-
+        car_pz.setVisibility(View.VISIBLE);
 
 
     }
@@ -500,76 +527,76 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
                     }
 
 
-                    //定义一次接收的数据的长度
-                    byte[] buf = new byte[4096];
-                    //将接收的数据打包到这个对象
-                    DatagramPacket dp = new DatagramPacket(buf, buf.length);
-
-
-                    //循环等待接收数据
-                    while (TraceAgentService.flag ||car_list != null ) {
-                        //设置包的长度
-                        dp.setLength(buf.length);
-                        try {
-                            //将程序挂起，等待数据包，并将接收到的数据打包到的dp对象中
-                            TraceAgentService.ds.receive(dp);
-                        } catch (IOException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        }
-
-                        //将接收到的数据包，转换成字符串
-                        String str = new String(dp.getData(), 0, dp.getLength());
-
-                        Log.i("tag", str);
-
-                        //处理数据
-                        String[] arrStr = str.split(" ");
-
-                        Log.i("tag", "length" + arrStr.length);
-
-                        //当数组的长度为小于或等于1，则直接跳过下面的部分
-                        if (arrStr.length <= 1) {
-                            return;
-                        }
-
-                        str = arrStr[2];
-
-                        Log.i("tag",car.getMac() + "   " +str);
-
-                        if (!str.equals(car.getMac())) {
-                            continue;
-                        }
-
-
-
-                        //对数据的处理
-                        str = arrStr[4];
-                        arrStr = str.split("\\|");
-
-
-                        long dl = Long.parseLong(arrStr[2], 16);
-                        Log.i("tag", "纬度" + arrStr[2]);
-                        car.setLat(dl * 1.0 / 3600000 + "");
-
-                        Log.i("tag", "纬度" + dl);
-
-                        dl = Long.parseLong(arrStr[3], 16);
-                        car.setLon(dl * 1.0 / 3600000 + "");
-
-                        Log.i("tag", "经度" + dl);
-
-                        dl = Long.parseLong(arrStr[4], 16);
-
-                        car.setSpeed(dl + "");
-                        Log.i("tag", "speed:" + car.getSpeed());
-
-                        ztFlag = false;
-
-                        handler.sendEmptyMessage(0x123);
-
-
-                    }
+//                    //定义一次接收的数据的长度
+//                    byte[] buf = new byte[4096];
+//                    //将接收的数据打包到这个对象
+//                    DatagramPacket dp = new DatagramPacket(buf, buf.length);
+//
+//
+//                    //循环等待接收数据
+//                    while (TraceAgentService.flag ||car_list != null ) {
+//                        //设置包的长度
+//                        dp.setLength(buf.length);
+//                        try {
+//                            //将程序挂起，等待数据包，并将接收到的数据打包到的dp对象中
+//                            TraceAgentService.ds.receive(dp);
+//                        } catch (IOException e) {
+//                            // TODO Auto-generated catch block
+//                            e.printStackTrace();
+//                        }
+//
+//                        //将接收到的数据包，转换成字符串
+//                        String str = new String(dp.getData(), 0, dp.getLength());
+//
+//                        Log.i("tag", str);
+//
+//                        //处理数据
+//                        String[] arrStr = str.split(" ");
+//
+//                        Log.i("tag", "length" + arrStr.length);
+//
+//                        //当数组的长度为小于或等于1，则直接跳过下面的部分
+//                        if (arrStr.length <= 1) {
+//                            return;
+//                        }
+//
+//                        str = arrStr[2];
+//
+//                        Log.i("tag",car.getMac() + "   " +str);
+//
+//                        if (!str.equals(car.getMac())) {
+//                            continue;
+//                        }
+//
+//
+//
+//                        //对数据的处理
+//                        str = arrStr[4];
+//                        arrStr = str.split("\\|");
+//
+//
+//                        long dl = Long.parseLong(arrStr[2], 16);
+//                        Log.i("tag", "纬度" + arrStr[2]);
+//                        car.setLat(dl * 1.0 / 3600000 + "");
+//
+//                        Log.i("tag", "纬度" + dl);
+//
+//                        dl = Long.parseLong(arrStr[3], 16);
+//                        car.setLon(dl * 1.0 / 3600000 + "");
+//
+//                        Log.i("tag", "经度" + dl);
+//
+//                        dl = Long.parseLong(arrStr[4], 16);
+//
+//                        car.setSpeed(dl + "");
+//                        Log.i("tag", "speed:" + car.getSpeed());
+//
+//                        ztFlag = false;
+//
+//                        handler.sendEmptyMessage(0x123);
+//
+//
+//                    }
 
 
                 } catch (Exception e) {

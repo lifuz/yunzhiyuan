@@ -12,9 +12,11 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/TableFixHeaders" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/firsttv" />
             <option value="$PROJECT_DIR$/testlistview" />
             <option value="$PROJECT_DIR$/testontouch" />
             <option value="$PROJECT_DIR$/testtablefix" />
+            <option value="$PROJECT_DIR$/testtv" />
             <option value="$PROJECT_DIR$/testviewpage" />
             <option value="$PROJECT_DIR$/testviewpager" />
           </set>
