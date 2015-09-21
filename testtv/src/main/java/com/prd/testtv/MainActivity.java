@@ -5,9 +5,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
 import com.prd.testtv.adapter.FragmentVerTicalPagerAdapter;
 import com.prd.testtv.fragment.GJFragment;
@@ -19,21 +19,18 @@ import com.prd.testtv.widget.VerticalViewPager;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener,View.OnFocusChangeListener,View.OnKeyListener{
 
-//    private EditText wv_text;
-//    private Button wv_btn;
-//    private WebView wv_web;
 
     private VerticalViewPager main_pager;
-    private View tab_gj,tab_xh,tab_ms,tab_gr;
+    private View tab_gj, tab_xh, tab_ms, tab_gr;
     private List<Fragment> fragments;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-       ActionBar bar = getSupportActionBar();
+        ActionBar bar = getSupportActionBar();
         bar.hide();
 
         setContentView(R.layout.activity_main);
@@ -48,6 +45,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tab_ms = findViewById(R.id.tab_ms);
         tab_xh = findViewById(R.id.tab_hb);
 
+        tab_gj.setFocusable(true);
+//        tab_gj.setNextFocusUpId(0);
+        tab_gr.setFocusable(true);
+        tab_ms.setFocusable(true);
+        tab_xh.setFocusable(true);
+
+        tab_gj.setOnFocusChangeListener(this);
+        tab_gr.setOnFocusChangeListener(this);
+        tab_xh.setOnFocusChangeListener(this);
+        tab_ms.setOnFocusChangeListener(this);
+
+        tab_gj.setNextFocusUpId(R.id.tab_gj);
+
+        tab_gj.setNextFocusRightId(R.id.wv_text);
+
+        tab_gj.setOnKeyListener(this);
+
+
         main_pager = (VerticalViewPager) findViewById(R.id.main_pager);
 
 
@@ -60,33 +75,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         main_pager.setAdapter(new MyPagerAdapter(getSupportFragmentManager(), fragments));
 
-        tab_gj.setBackgroundColor(getResources().getColor(R.color.orange));
+//        tab_gj.setBackgroundColor(getResources().getColor(R.color.orange));
         main_pager.setCurrentItem(0);
-
-        main_pager.setOnPageChangeListener(new MyOnPageChangeListener());
-
-
-//        wv_btn = (Button) findViewById(R.id.wv_btn);
-//        wv_text = (EditText) findViewById(R.id.wv_text);
-//        wv_web = (WebView) findViewById(R.id.wv_web);
 //
-//        wv_btn.setOnClickListener(this);
-//
-//        wv_btn.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//            @Override
-//            public void onFocusChange(View v, boolean hasFocus) {
-//                if (hasFocus) {
-//                    String str = wv_text.getText().toString();
-//                    wv_web.loadUrl(str);
-//                }
-//            }
-//        });
-//
-//        wv_web.setWebViewClient(new MyWebViewClient());
-//
-//        WebSettings webSettings = wv_web.getSettings();
-//        webSettings.setJavaScriptEnabled(true);
-//        webSettings.setSupportZoom(true);
+//        main_pager.setOnPageChangeListener(new MyOnPageChangeListener());
 
 
     }
@@ -116,67 +108,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private class MyOnPageChangeListener implements VerticalViewPager.OnPageChangeListener {
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
 
-        @Override
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        if (hasFocus) {
+            switch (v.getId()) {
+                case R.id.tab_gj:
 
-        }
+                    main_pager.setCurrentItem(0);
+                    break;
+                case R.id.tab_gr:
 
-        @Override
-        public void onPageSelected(int position) {
+                    main_pager.setCurrentItem(1);
+                    break;
+                case R.id.tab_hb:
 
-            switch (position) {
-                case 0:
+                    main_pager.setCurrentItem(2);
+                    break;
+                case R.id.tab_ms:
 
-                    tab_gj.setBackgroundColor(getResources().getColor(R.color.orange));
-                    tab_xh.setBackgroundColor(0);
-                    tab_ms.setBackgroundColor(0);
-                    tab_gr.setBackgroundColor(0);
+                    main_pager.setCurrentItem(3);
 
                     break;
 
-                case 1:
-
-                    tab_gj.setBackgroundColor(0);
-                    tab_xh.setBackgroundColor(getResources().getColor(R.color.orange));
-                    tab_ms.setBackgroundColor(0);
-                    tab_gr.setBackgroundColor(0);
-
-                    break;
-
-                case 2:
-
-                    tab_gj.setBackgroundColor(0);
-                    tab_xh.setBackgroundColor(0);
-                    tab_ms.setBackgroundColor(getResources().getColor(R.color.orange));
-                    tab_gr.setBackgroundColor(0);
-
-                    break;
-
-                case 3:
-
-                    tab_gj.setBackgroundColor(0);
-                    tab_xh.setBackgroundColor(0);
-                    tab_ms.setBackgroundColor(0);
-                    tab_gr.setBackgroundColor(getResources().getColor(R.color.orange));
-
-                    break;
             }
-
         }
 
-        @Override
-        public void onPageScrollStateChanged(int state) {
-
-        }
     }
 
     private class MyPagerAdapter extends FragmentVerTicalPagerAdapter {
 
         private List<Fragment> fragments;
 
-        public MyPagerAdapter(FragmentManager manager,List<Fragment> fragments) {
+        public MyPagerAdapter(FragmentManager manager, List<Fragment> fragments) {
             super(manager);
             this.fragments = fragments;
         }
@@ -193,13 +157,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    @Override
+    public boolean onKey(View v, int keyCode, KeyEvent event) {
 
-    private class MyWebViewClient extends WebViewClient {
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
 
-            view.loadUrl(url);
-            return true;
+        switch (v.getId()) {
+
+            case R.id.tab_gj:
+
+                if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
+
+                    Log.i("tag","点击右键");
+
+                }
+
+                break;
+
         }
+
+
+        return false;
     }
 }

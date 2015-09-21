@@ -18,7 +18,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_gravity="center"
-            android:gravity="center">
+            android:gravity="center"
+            android:background="@drawable/main_button">
 
             <ImageView
                 android:layout_width="60dp"
@@ -43,7 +44,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_gravity="center"
-            android:gravity="center">
+            android:gravity="center"
+            android:background="@drawable/main_button">
 
             <ImageView
                 android:layout_width="60dp"
@@ -68,7 +70,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_gravity="center"
-            android:gravity="center">
+            android:gravity="center"
+            android:background="@drawable/main_button">
 
             <ImageView
                 android:layout_width="60dp"
@@ -93,7 +96,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_gravity="center"
-            android:gravity="center">
+            android:gravity="center"
+            android:background="@drawable/main_button">
 
             <ImageView
                 android:layout_width="60dp"
@@ -129,29 +133,6 @@
         android:persistentDrawingCache="animation" />
 
 
-    <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content">-->
-        <!--<EditText-->
-            <!--android:id="@+id/wv_text"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_weight="3"-->
-            <!--android:hint="请输入网址"-->
-            <!--android:text="https://www.baidu.com"-->
-            <!--/>-->
-        <!--<Button-->
-            <!--android:id="@+id/wv_btn"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_weight="1"-->
-            <!--android:text="前往"-->
-            <!--android:background="@drawable/button_selrctor"-->
-            <!--/>-->
-    <!--</LinearLayout>-->
-    <!--<WebView-->
-        <!--android:id="@+id/wv_web"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"/>-->
+
 
 </LinearLayout>
