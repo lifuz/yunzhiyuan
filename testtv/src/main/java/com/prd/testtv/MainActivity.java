@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 
@@ -64,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         main_pager = (VerticalViewPager) findViewById(R.id.main_pager);
+//        main_pager.set
 
 
         fragments = new ArrayList<>();
@@ -111,22 +111,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
 
+
+
         if (hasFocus) {
+            clearColor();
             switch (v.getId()) {
                 case R.id.tab_gj:
-
+                    tab_gj.setBackgroundColor(getResources().getColor(R.color.orange));
                     main_pager.setCurrentItem(0);
+
                     break;
                 case R.id.tab_gr:
 
+                    tab_gr.setBackgroundColor(getResources().getColor(R.color.orange));
                     main_pager.setCurrentItem(1);
                     break;
                 case R.id.tab_hb:
-
+                    tab_xh.setBackgroundColor(getResources().getColor(R.color.orange));
                     main_pager.setCurrentItem(2);
                     break;
                 case R.id.tab_ms:
-
+                    tab_ms.setBackgroundColor(getResources().getColor(R.color.orange));
                     main_pager.setCurrentItem(3);
 
                     break;
@@ -167,15 +172,66 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
 
-                    Log.i("tag","点击右键");
+//                    Log.i("tag", "点击右键");
+
+                    tab_gj.setBackgroundColor(getResources().getColor(R.color.notice3));
 
                 }
 
                 break;
 
+            case R.id.tab_gr:
+
+                if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
+
+//                    Log.i("tag", "点击右键");
+
+                    tab_gr.setBackgroundColor(getResources().getColor(R.color.notice3));
+
+                }
+
+                break;
+
+            case R.id.tab_hb:
+
+                if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
+
+//                    Log.i("tag", "点击右键");
+
+                    tab_xh.setBackgroundColor(getResources().getColor(R.color.notice3));
+
+                }
+
+                break;
+
+            case R.id.tab_ms:
+
+                if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
+
+//                    Log.i("tag", "点击右键");
+
+                    tab_ms.setBackgroundColor(getResources().getColor(R.color.notice3));
+
+                }
+
+                break;
+
+
+
         }
 
 
         return false;
+    }
+
+
+    private void clearColor(){
+
+
+        tab_gj.setBackgroundColor(0);
+        tab_gr.setBackgroundColor(0);
+        tab_ms.setBackgroundColor(0);
+        tab_xh.setBackgroundColor(0);
+
     }
 }
