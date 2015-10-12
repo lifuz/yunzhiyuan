@@ -6,10 +6,12 @@
     android:gravity="center"
     android:layout_gravity="center">
 
-    <TextView
+    <Button
+        android:id="@+id/gr_login_out"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="个人"
-        android:textSize="40sp"/>
+        android:text="退出登录"
+        android:textSize="40sp"
+        android:background="@color/notice1"/>
 
 </LinearLayout>

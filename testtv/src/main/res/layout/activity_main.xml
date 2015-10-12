@@ -125,7 +125,7 @@
 
 
 
-    <com.prd.testtv.widget.VerticalViewPager
+    <FrameLayout
         android:id="@+id/main_pager"
         android:layout_width="0dp"
         android:layout_height="match_parent"

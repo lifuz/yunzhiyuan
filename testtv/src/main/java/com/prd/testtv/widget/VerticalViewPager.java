@@ -67,6 +67,8 @@ public class VerticalViewPager extends ViewGroup {
      */
     private static final int MAX_SETTLE_DURATION = 600; // ms
 
+    private boolean scrollble = true;
+
     /**
      * 最小滑動距離
      */
@@ -1600,6 +1602,13 @@ public class VerticalViewPager extends ViewGroup {
     // XXX 垂直
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
+
+        if (!scrollble) {
+            Log.i("tag","不滚动");
+            return true;
+        }
+
+
         if (mFakeDragging) {
             // A fake drag is in progress already, ignore this real one
             // but still eat the touch events.
@@ -2311,5 +2320,13 @@ public class VerticalViewPager extends ViewGroup {
             gravity = a.getInteger(0, Gravity.NO_GRAVITY);
             a.recycle();
         }
+    }
+
+    public boolean isScrollble() {
+        return scrollble;
+    }
+
+    public void setScrollble(boolean scrollble) {
+        this.scrollble = scrollble;
     }
 }

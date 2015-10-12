@@ -89,6 +89,12 @@
     </ListView>
 
     <Button
+        android:id="@+id/car_jp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="查看节拍"
+        android:textSize="30sp" />
+    <Button
         android:id="@+id/car_dm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

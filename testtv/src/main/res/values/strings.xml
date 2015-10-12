@@ -3,4 +3,8 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <string name="url_login">http://121.40.199.67/TrackServer/login</string>
+    <string name="url_hb">http://121.40.199.67/TrackServer/getVehicleCurrentInfo</string>
+    <string name="url_car">http://121.40.199.67/TrackServer/getVehicleInfoByVid</string>
 </resources>

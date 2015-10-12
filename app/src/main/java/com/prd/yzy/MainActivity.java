@@ -36,14 +36,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     private List<Fragment> fragments;
 
-    private int offset = 0;// 动画图片偏移量
-    private int currIndex = 0;// 当前页卡编号
-
-    /**
-     * 页卡总数 *
-     */
-    private static final int pageSize = 4;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

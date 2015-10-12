@@ -1,29 +1,47 @@
 package com.prd.testtv;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.FrameLayout;
 
-import com.prd.testtv.adapter.FragmentVerTicalPagerAdapter;
 import com.prd.testtv.fragment.GJFragment;
 import com.prd.testtv.fragment.GRFragment;
 import com.prd.testtv.fragment.HBFragment;
 import com.prd.testtv.fragment.MSFragment;
-import com.prd.testtv.widget.VerticalViewPager;
 
-import java.util.ArrayList;
+import org.simple.eventbus.EventBus;
+import org.simple.eventbus.Subscriber;
+
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,View.OnFocusChangeListener,View.OnKeyListener{
 
 
-    private VerticalViewPager main_pager;
+    private FrameLayout main_pager;
     private View tab_gj, tab_xh, tab_ms, tab_gr;
     private List<Fragment> fragments;
+
+    private boolean tab_flag = false;
+
+    private SharedPreferences share;
+
+    private GJFragment gjFragment;
+    private HBFragment hbFragment;
+    private MSFragment msFragment;
+    private GRFragment grFragment;
+
+    private FragmentManager fm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +51,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         bar.hide();
 
         setContentView(R.layout.activity_main);
+
+
+
+        // 将对象注册到事件总线中， ****** 注意要在onDestory中进行注销 ****
+        EventBus.getDefault().register(this);
+
+        share = getSharedPreferences("login",MODE_PRIVATE);
+
+        String ogid = share.getString("ogid","");
+
+        fm = getSupportFragmentManager();
+
+        if (ogid.equals("")){
+            startActivity(new Intent(MainActivity.this,LoginAcitivity.class));
+        } else  {
+//            if (!isTaskRoot()) {
+//                finish();
+//                return;
+//            }
+        }
 
         initView();
     }
@@ -55,32 +93,118 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tab_xh.setOnFocusChangeListener(this);
         tab_ms.setOnFocusChangeListener(this);
 
+        tab_gj.setOnClickListener(this);
+        tab_gr.setOnClickListener(this);
+        tab_ms.setOnClickListener(this);
+        tab_xh.setOnClickListener(this);
+
         tab_gj.setNextFocusUpId(R.id.tab_gj);
 
         tab_gj.setNextFocusRightId(R.id.wv_text);
+//        tab_xh.setNextFocusRightId(R.id.tab_hb);
+        tab_ms.setNextFocusRightId(R.id.tab_ms);
 
         tab_gj.setOnKeyListener(this);
+        tab_gr.setOnKeyListener(this);
+        tab_ms.setOnKeyListener(this);
+        tab_xh.setOnKeyListener(this);
 
 
-        main_pager = (VerticalViewPager) findViewById(R.id.main_pager);
-//        main_pager.set
+        main_pager = (FrameLayout) findViewById(R.id.main_pager);
+
+        setTabSelection(0);
 
 
-        fragments = new ArrayList<>();
-
-        fragments.add(new GJFragment());
-        fragments.add(new HBFragment());
-        fragments.add(new MSFragment());
-        fragments.add(new GRFragment());
-
-        main_pager.setAdapter(new MyPagerAdapter(getSupportFragmentManager(), fragments));
-
-//        tab_gj.setBackgroundColor(getResources().getColor(R.color.orange));
-        main_pager.setCurrentItem(0);
+//        fragments = new ArrayList<>();
 //
-//        main_pager.setOnPageChangeListener(new MyOnPageChangeListener());
+//        fragments.add(new GJFragment());
+//        fragments.add(new HBFragment());
+//        fragments.add(new MSFragment());
+//        fragments.add(new GRFragment());
 
 
+
+
+    }
+
+
+    private void setTabSelection(int index) {
+        clearColor();
+        FragmentTransaction transaction = fm.beginTransaction();
+        hideFragments(transaction);
+        switch (index){
+            case 0:
+
+                tab_gj.setBackgroundColor(getResources().getColor(R.color.orange));
+                if (gjFragment == null) {
+                    gjFragment = new GJFragment();
+                    transaction.add(R.id.main_pager,gjFragment);
+                } else  {
+                    transaction.show(gjFragment);
+                }
+
+                break;
+
+            case 1:
+
+                tab_xh.setBackgroundColor(getResources().getColor(R.color.orange));
+                if (hbFragment == null) {
+                    hbFragment = new HBFragment();
+                    transaction.add(R.id.main_pager,hbFragment);
+                } else  {
+                    transaction.show(hbFragment);
+                }
+
+                break;
+
+            case 2:
+
+                tab_ms.setBackgroundColor(getResources().getColor(R.color.orange));
+                if (msFragment == null) {
+                    msFragment = new MSFragment();
+                    transaction.add(R.id.main_pager,msFragment);
+                } else  {
+                    transaction.show(msFragment);
+                }
+
+                break;
+
+            case 3:
+
+                tab_gr.setBackgroundColor(getResources().getColor(R.color.orange));
+                if (grFragment == null) {
+                    grFragment = new GRFragment();
+                    transaction.add(R.id.main_pager,grFragment);
+                } else  {
+                    transaction.show(grFragment);
+                }
+
+                break;
+        }
+
+        transaction.commit();
+    }
+
+    /**
+     * 将所有的Fragment都置为隐藏状态。
+     *
+     * @param transaction
+     *            用于对Fragment执行操作的事务
+     */
+    private void hideFragments(FragmentTransaction transaction) {
+        if (gjFragment != null) {
+            transaction.hide(gjFragment);
+        }
+        if (hbFragment != null) {
+            transaction.hide(hbFragment);
+        }
+        if (msFragment != null) {
+            transaction.hide(msFragment);
+        }
+
+        if (grFragment != null) {
+            transaction.hide(grFragment);
+        }
     }
 
     @Override
@@ -117,49 +241,55 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             clearColor();
             switch (v.getId()) {
                 case R.id.tab_gj:
-                    tab_gj.setBackgroundColor(getResources().getColor(R.color.orange));
-                    main_pager.setCurrentItem(0);
+                    setTabSelection(0);
+
+                    if (tab_flag) {
+                        tab_xh.setFocusable(true);
+                        tab_ms.setFocusable(true);
+                        tab_gr.setFocusable(true);
+                        tab_flag = false;
+                    }
 
                     break;
                 case R.id.tab_gr:
 
-                    tab_gr.setBackgroundColor(getResources().getColor(R.color.orange));
-                    main_pager.setCurrentItem(1);
+                    setTabSelection(3);
+
+                    if (tab_flag) {
+                        tab_xh.setFocusable(true);
+                        tab_ms.setFocusable(true);
+                        tab_gj.setFocusable(true);
+                        tab_flag = false;
+                    }
+
                     break;
                 case R.id.tab_hb:
-                    tab_xh.setBackgroundColor(getResources().getColor(R.color.orange));
-                    main_pager.setCurrentItem(2);
+                    setTabSelection(1);
+
+                    if (tab_flag) {
+                        tab_gj.setFocusable(true);
+                        tab_ms.setFocusable(true);
+                        tab_gr.setFocusable(true);
+
+                        tab_flag = false;
+                    }
+
                     break;
                 case R.id.tab_ms:
-                    tab_ms.setBackgroundColor(getResources().getColor(R.color.orange));
-                    main_pager.setCurrentItem(3);
+                    setTabSelection(2);
+
+                    if (tab_flag) {
+                        tab_xh.setFocusable(true);
+                        tab_gj.setFocusable(true);
+                        tab_gr.setFocusable(true);
+                        tab_flag = false;
+                    }
 
                     break;
 
             }
         }
 
-    }
-
-    private class MyPagerAdapter extends FragmentVerTicalPagerAdapter {
-
-        private List<Fragment> fragments;
-
-        public MyPagerAdapter(FragmentManager manager, List<Fragment> fragments) {
-            super(manager);
-            this.fragments = fragments;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return (fragments == null || fragments.size() == 0) ? null
-                    : fragments.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return fragments == null ? 0 : fragments.size();
-        }
     }
 
     @Override
@@ -176,6 +306,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     tab_gj.setBackgroundColor(getResources().getColor(R.color.notice3));
 
+                    tab_flag = true;
+
+                    tab_xh.setFocusable(false);
+                    tab_ms.setFocusable(false);
+                    tab_gr.setFocusable(false);
+
+
                 }
 
                 break;
@@ -184,9 +321,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
 
-//                    Log.i("tag", "点击右键");
+                    Log.i("tag", "点击右键");
 
                     tab_gr.setBackgroundColor(getResources().getColor(R.color.notice3));
+
+                    tab_flag = true;
+
+                    tab_xh.setFocusable(false);
+                    tab_ms.setFocusable(false);
+                    tab_gj.setFocusable(false);
 
                 }
 
@@ -200,23 +343,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     tab_xh.setBackgroundColor(getResources().getColor(R.color.notice3));
 
-                }
+                    tab_flag = true;
 
-                break;
-
-            case R.id.tab_ms:
-
-                if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
-
-//                    Log.i("tag", "点击右键");
-
-                    tab_ms.setBackgroundColor(getResources().getColor(R.color.notice3));
+                    tab_gj.setFocusable(false);
+                    tab_ms.setFocusable(false);
+                    tab_gr.setFocusable(false);
 
                 }
 
                 break;
-
-
+//
+//            case R.id.tab_ms:
+//
+//                if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
+//
+////                    Log.i("tag", "点击右键");
+//
+//                    tab_ms.setBackgroundColor(getResources().getColor(R.color.notice3));
+//
+//                    tab_flag = true;
+//
+//                    tab_xh.setFocusable(false);
+//                    tab_gj.setFocusable(false);
+//                    tab_gr.setFocusable(false);
+//
+//                }
+//
+//                break;
 
         }
 
@@ -232,6 +385,54 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tab_gr.setBackgroundColor(0);
         tab_ms.setBackgroundColor(0);
         tab_xh.setBackgroundColor(0);
+
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("提示");
+                builder.setMessage("你确定要退出吗？");
+
+                DialogInterface.OnClickListener dialog = new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        // TODO Auto-generated method stub
+                        if (arg1 == DialogInterface.BUTTON_POSITIVE) {
+                            arg0.cancel();
+                        } else if (arg1 == DialogInterface.BUTTON_NEGATIVE) {
+
+                            Log.i("tag", "退出");
+                            EventBus.getDefault().post(new String(), "csuicide");
+
+                        }
+                    }
+                };
+                builder.setPositiveButton("取消", dialog);
+                builder.setNegativeButton("确定", dialog);
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+
+            }
+        }
+        return false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // ****** 不要忘了进行注销 ****
+        EventBus.getDefault().unregister(this);
+    }
+
+
+    //订阅事件
+    @Subscriber(tag = "csuicide")
+    private void csuicideMyself(String msg) {
+        finish();
 
     }
 }

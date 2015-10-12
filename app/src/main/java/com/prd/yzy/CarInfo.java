@@ -65,7 +65,7 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
 
     private ListView car_list;
 
-    private Button car_dm,car_pz;
+    private Button car_dm,car_pz,car_jp;
 
 
     public static boolean flag = true;
@@ -151,6 +151,8 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
 
                     car.setMac(response.getString("mac"));
 
+                    car_jp.setVisibility(View.VISIBLE);
+
                     Log.i("tag", car.getMac());
 
                     ztFlag = true;
@@ -216,6 +218,12 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
 
         car_dm = (Button) findViewById(R.id.car_dm);
         car_dm.setOnClickListener(this);
+
+        car_jp = (Button) findViewById(R.id.car_jp);
+        car_jp.setOnClickListener(this);
+        car_jp.setVisibility(View.GONE);
+
+
         car_pz = (Button) findViewById(R.id.car_pz);
         car_pz.setOnClickListener(this);
         car_pz.setVisibility(View.GONE);
@@ -252,6 +260,13 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
 
                 startActivity(new Intent(CarInfo.this,BarChartInfo.class));
 
+                break;
+
+            case R.id.car_jp:
+
+                Intent it = new Intent(CarInfo.this,JPAcitivity.class);
+                it.putExtra("mac",car.getMac());
+                startActivity(it);
                 break;
 
             case R.id.car_pz:
@@ -478,36 +493,17 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
                     while (bn) {
 
                         if (TraceAgentService.socket == null) {
-//                            Log.i("tag", "线程开了吗");
                             continue;
                         }
 
 
                         if (!HeartBeatThread.hbFlag) {
-//                            Log.i("tag", "登录成功了吗");
                             continue;
                         }
 
-//                        Log.i("tag",car.toString());
-//
-//                        Log.i("tag", car.getMac());
-//                        Log.i("tag",SocketThread.loginInfo.containsKey("key") + "");
-//                        Log.i("tag",SocketThread.loginInfo.get("key").equals("") + "");
-//                        Log.i("tag","访问网络的线程开启");
                         //判断条件，如果car对象不无空，Mac的属性已经被赋值，和数据通道是否建立
                         if (car != null && car.getMac() != null && SocketThread.loginInfo.containsKey("key")
                                 && !SocketThread.loginInfo.get("key").equals("")) {
-//                            //发送点名信息。
-//                            ps.print("cmd Retr\n" +
-//                                    "mac " + car.getMac() + "\n" +
-//                                    "app " + (count + 1) + "\n" +
-//                                    "\n" +
-//                                    "cmd Ctlm\n" +
-//                                    "mac " + car.getMac() + "\n" +
-//                                    "optcode 2\n" +
-//                                    "optargs 0\n" +
-//                                    "app " + (count + 1) + "\n\n");
-
                             String str = "cmd Retr\n" +
                                     "mac " + car.getMac() + "\n" +
                                     "app " + (count + 1) + "\n" +
@@ -518,86 +514,12 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
                                     "optargs 0\n" +
                                     "app " + (count + 1) + "\n\n";
 
-//                            Thread.sleep(10000);
                             EventBus.getDefault().post(str, "event");
 
                             Log.i("tag", "jinqule");
                             bn = false;
                         }
                     }
-
-
-//                    //定义一次接收的数据的长度
-//                    byte[] buf = new byte[4096];
-//                    //将接收的数据打包到这个对象
-//                    DatagramPacket dp = new DatagramPacket(buf, buf.length);
-//
-//
-//                    //循环等待接收数据
-//                    while (TraceAgentService.flag ||car_list != null ) {
-//                        //设置包的长度
-//                        dp.setLength(buf.length);
-//                        try {
-//                            //将程序挂起，等待数据包，并将接收到的数据打包到的dp对象中
-//                            TraceAgentService.ds.receive(dp);
-//                        } catch (IOException e) {
-//                            // TODO Auto-generated catch block
-//                            e.printStackTrace();
-//                        }
-//
-//                        //将接收到的数据包，转换成字符串
-//                        String str = new String(dp.getData(), 0, dp.getLength());
-//
-//                        Log.i("tag", str);
-//
-//                        //处理数据
-//                        String[] arrStr = str.split(" ");
-//
-//                        Log.i("tag", "length" + arrStr.length);
-//
-//                        //当数组的长度为小于或等于1，则直接跳过下面的部分
-//                        if (arrStr.length <= 1) {
-//                            return;
-//                        }
-//
-//                        str = arrStr[2];
-//
-//                        Log.i("tag",car.getMac() + "   " +str);
-//
-//                        if (!str.equals(car.getMac())) {
-//                            continue;
-//                        }
-//
-//
-//
-//                        //对数据的处理
-//                        str = arrStr[4];
-//                        arrStr = str.split("\\|");
-//
-//
-//                        long dl = Long.parseLong(arrStr[2], 16);
-//                        Log.i("tag", "纬度" + arrStr[2]);
-//                        car.setLat(dl * 1.0 / 3600000 + "");
-//
-//                        Log.i("tag", "纬度" + dl);
-//
-//                        dl = Long.parseLong(arrStr[3], 16);
-//                        car.setLon(dl * 1.0 / 3600000 + "");
-//
-//                        Log.i("tag", "经度" + dl);
-//
-//                        dl = Long.parseLong(arrStr[4], 16);
-//
-//                        car.setSpeed(dl + "");
-//                        Log.i("tag", "speed:" + car.getSpeed());
-//
-//                        ztFlag = false;
-//
-//                        handler.sendEmptyMessage(0x123);
-//
-//
-//                    }
-
 
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/TableFixHeaders/TableFixHeaders.iml" filepath="$PROJECT_DIR$/TableFixHeaders/TableFixHeaders.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/firsttv/firsttv.iml" filepath="$PROJECT_DIR$/firsttv/firsttv.iml" />
+      <module fileurl="file://$PROJECT_DIR$/percent-support-extends/percent-support-extends.iml" filepath="$PROJECT_DIR$/percent-support-extends/percent-support-extends.iml" />
       <module fileurl="file://$PROJECT_DIR$/testlistview/testlistview.iml" filepath="$PROJECT_DIR$/testlistview/testlistview.iml" />
       <module fileurl="file://$PROJECT_DIR$/testontouch/testontouch.iml" filepath="$PROJECT_DIR$/testontouch/testontouch.iml" />
       <module fileurl="file://$PROJECT_DIR$/testtablefix/testtablefix.iml" filepath="$PROJECT_DIR$/testtablefix/testtablefix.iml" />

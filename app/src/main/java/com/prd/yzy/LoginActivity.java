@@ -164,7 +164,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                             arg0.cancel();
                         } else if (arg1 == DialogInterface.BUTTON_NEGATIVE) {
                             EventBus.getDefault().post(new String(), "csuicide");
-
                         }
                     }
                 };
