@@ -1,6 +1,7 @@
 package com.prd.testtv;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +15,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -21,6 +23,8 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.prd.testtv.application.PrdApplication;
 import com.prd.testtv.bean.Car;
+import com.prd.testtv.formatter.XValueFormatter;
+import com.prd.testtv.formatter.YValueFormatter;
 import com.prd.testtv.request.GJsonObjectRequest;
 import com.prd.testtv.service.TraceAgentService;
 
@@ -29,8 +33,10 @@ import org.simple.eventbus.Subscriber;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 作者：李富 on 2015/9/24.
@@ -58,6 +64,8 @@ public class CarActivity extends BaseActivity implements View.OnClickListener {
 
     private List<Long> longs;
     private BarData data;
+
+    List<Map<String, Long>> xyValue = new ArrayList<>();
 
 
     @Override
@@ -226,12 +234,13 @@ public class CarActivity extends BaseActivity implements View.OnClickListener {
         //设置x轴的字体
         xAxis.setTypeface(mtf);
 
-//        //是否画横轴的表格
-//        xAxis.setDrawGridLines(false);
-//
-//        //设置连个标签的间隔
-//        xAxis.setSpaceBetweenLabels(2);
-//
+        //是否画横轴的表格
+        xAxis.setDrawGridLines(false);
+
+        //设置连个标签的间隔
+        xAxis.setSpaceBetweenLabels(2);
+
+        xAxis.setValueFormatter(new XValueFormatter());
 //        //设置是否画x轴的线
 //        xAxis.setDrawAxisLine(false);
 
@@ -239,11 +248,22 @@ public class CarActivity extends BaseActivity implements View.OnClickListener {
         //设置y轴的左轴
         YAxis left = barChart.getAxisLeft();
         //设置是否显示网格
-//        left.setDrawGridLines(false);
+        left.setDrawGridLines(false);
 //        //设置是否显示y轴的左轴
 //        left.setDrawAxisLine(false);
 //        //设置是否显示y轴左轴的标签
 //        left.setDrawLabels(false);
+
+        left.setAxisMaxValue(20f);
+        LimitLine ll = new LimitLine(10f, "10s");
+        ll.setLineColor(Color.RED);
+        ll.setLineWidth(1f);
+        ll.setLabelPosition(LimitLine.LimitLabelPosition.LEFT_BOTTOM);
+//        ll.enableDashedLine(5f,5f,5f);
+        ll.enableDashedLine(5f, 5f, 0f);
+        left.addLimitLine(ll);
+        left.setValueFormatter(new YValueFormatter());
+//        left.setValueFormatter(xValue);
 
         //设置y轴的右轴
         YAxis right = barChart.getAxisRight();
@@ -341,33 +361,41 @@ public class CarActivity extends BaseActivity implements View.OnClickListener {
 
             if (!str.equals(preData)) {
                 str = arrStr[0];
-                long utc = Long.valueOf(str,16) - Long.valueOf(preStr,16);
+                long utc = Long.valueOf(str, 16) - Long.valueOf(preStr, 16);
+
+                Log.i("tag", utc + "");
+
+                barVal++;
 
 
-//                barVal ++;
-//                barVal ++;
+                Map<String, Long> map = new HashMap<>();
 
-                barVal = barVal + 1;
+                map.put(barVal + "", utc);
 
-                Log.i("tag", utc + " : + " + barVal);
-                data.addXValue(barVal + "");
-                barVal = barVal - 1;
-                data.addEntry(new BarEntry(utc, barVal), 0);
-                barVal = barVal + 1;
-                barChart.setData(data);
-                //立即显示图表
-//                barChart.animateX(10);
-                barChart.animateXY(10,10);
+                if (barVal > 20) {
+                    xyValue.remove(0);
+                    xyValue.add(map);
+
+//                    data.removeXValue(0);
+//                    data.addXValue(barVal + "");
+                } else {
+                    xyValue.add(map);
+                }
+
+                Log.i("lifuz", xyValue.toString());
+
+                updataBarChart(xyValue);
+
+                map = null;
 
                 preStr = str;
                 preData = arrStr[4];
             }
 
-
-
         }
 
-        car_js.setText(Long.parseLong(arrStr[4], 16) + "");
+
+            car_js.setText(Long.parseLong(arrStr[4], 16) + "");
 
         str = arrStr[9];
         arrStr = str.split(";");
@@ -387,6 +415,37 @@ public class CarActivity extends BaseActivity implements View.OnClickListener {
 //        ztFlag = false;
 //
 //        handler.sendEmptyMessage(0x123);
+    }
+
+    private void updataBarChart(List<Map<String, Long>> xyValue) {
+
+        data.removeDataSet(0);
+
+        ArrayList<String> xVals = new ArrayList<>();
+        //设置y轴的数据
+        ArrayList<BarEntry> yVals = new ArrayList<>();
+
+        for (int i = 0; i < xyValue.size(); i++) {
+
+            Map<String, Long> map = xyValue.get(i);
+            Set<String> set = map.keySet();
+            Iterator<String> it = set.iterator();
+            String xVal = it.next();
+            xVals.add(xVal);
+
+            yVals.add(new BarEntry(map.get(xVal), i));
+
+        }
+
+        BarDataSet dataSet = new BarDataSet(yVals, "shuju");
+
+        BarData barData = new BarData(xVals, dataSet);
+//        data.addDataSet(dataSet);
+        barChart.setData(barData);
+        barChart.animateX(10);
+
+//        barData = null;
+
     }
 
 
