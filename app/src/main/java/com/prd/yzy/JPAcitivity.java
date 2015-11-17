@@ -327,6 +327,7 @@ public class JPAcitivity extends BaseActivity implements View.OnClickListener {
         ll.setLineColor(Color.RED);
         ll.setLineWidth(1f);
         ll.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
+        ll.enableDashedLine(5f, 5f, 0f);
         left.addLimitLine(ll);
 
         //设置y轴的右轴

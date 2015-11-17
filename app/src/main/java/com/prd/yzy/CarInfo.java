@@ -276,6 +276,7 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
                     str = "cmd Ctlm\n" +
                             "mac " + car.getMac() + "\n" +
                             "optcode 73\n" +
+//                            "optcode 73\n" +
                             "optargs 2;1;1;B4;0;1;1;0;0;0;0\n" +
                             "app "+count +"\n\n";
                     car_pz.setText("开启");
@@ -310,8 +311,8 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
 
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("img", R.drawable.carinfo_ico_speed);
-        map.put("title", "速度");
-        map.put("info", car.getSpeed() + " Km/h");
+        map.put("title", "当日数量(个)");
+        map.put("info", car.getSpeed());
 //        Log.i("tag", car.getSpeed());
 //        mapList.add(map);
         listItems.add(map);
@@ -337,17 +338,18 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
         listItems.add(map);
 //        mapList.add(map);
 
+
         map = new HashMap<String, Object>();
         map.put("img", R.drawable.carinfo_ico_driver);
-        map.put("title", "当前司机");
-        map.put("info", car.getDriverName());
+        map.put("title", "操作员");
+        map.put("info", "李富");
         listItems.add(map);
 //        mapList.add(map);
 
         map = new HashMap<String, Object>();
         map.put("img", R.drawable.carinfo_ico_miles);
-        map.put("title", "本月运行里程");
-        map.put("info", car.getMiles() + "公里");
+        map.put("title", "本月累计数量(个)");
+        map.put("info", car.getMiles());
         listItems.add(map);
 //        mapList.add(map);
 
@@ -360,8 +362,8 @@ public class CarInfo extends BaseActivity implements View.OnClickListener {
 
         map = new HashMap<String, Object>();
         map.put("img", R.drawable.carinfo_ico_miles);
-        map.put("title", "上月运行里程");
-        map.put("info", car.getBeforeMiles() + "公里");
+        map.put("title", "上月累计数量(个)");
+        map.put("info", car.getBeforeMiles());
         listItems.add(map);
 //        mapList.add(map);
 

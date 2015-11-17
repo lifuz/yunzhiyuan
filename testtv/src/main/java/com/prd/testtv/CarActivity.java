@@ -264,7 +264,6 @@ public class CarActivity extends BaseActivity implements View.OnClickListener {
         left.addLimitLine(ll);
         left.setValueFormatter(new YValueFormatter());
 //        left.setValueFormatter(xValue);
-
         //设置y轴的右轴
         YAxis right = barChart.getAxisRight();
         //设置是否显示网格
